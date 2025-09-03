@@ -10,8 +10,9 @@ python --version
 py -3.11 --version
 ```
 ### 2) 가상환경 설정
+- 가상환경 이름은 꼭 .venv가 아니어도 됨
 ```
-python -m venv .venv
+python -m venv .venv 
 .\.venv\Scripts\Activate
 
 # windows / git bash
