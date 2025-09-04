@@ -32,7 +32,7 @@ def demo_bnpl_series():
 def demo_spending_series():
     return read_json("spending_series.json")
 
-@router.post("/demo/advice")
+@router.get("/demo/advice")
 def demo_advice():
     return read_json("advice.json")
 

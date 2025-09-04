@@ -1,0 +1,12 @@
+{
+  "summary": "최근 BNPL 사용액은 증가 추세입니다. 쇼핑 카테고리 비중이 높습니다.",
+  "insights": [
+    {"title": "쇼핑 집중", "detail": "전체 BNPL의 52%가 쇼핑에서 발생", "impact": "down"},
+    {"title": "구독 자동결제", "detail": "BNPL 구독 3건 → 월 3.2만원", "impact": "neutral"}
+  ],
+  "actions": [
+    "월 BNPL 상한 15만원 설정",
+    "장바구니 10만원 초과시 알림",
+    "구독 1건 해지로 월 1.1만원 절감"
+  ]
+}
