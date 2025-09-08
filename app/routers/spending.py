@@ -6,7 +6,6 @@ from app.domain.spending.analysis import Txn, aggregate_3m
 
 router = APIRouter(prefix="/spending", tags=["spending"])
 
-
 @router.post("/analyze", response_model=AnalyzeResponse)
 def analyze_spending(req: AnalyzeRequest):
     txs: List[Txn] = [Txn(**t.model_dump()) for t in req.transactions]

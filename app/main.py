@@ -8,7 +8,7 @@ from app.routers import demo, score, spending
 # from app.routers import bnpl, spending, advice
 
 # 환경변수로 API prefix와 CORS 허용 오리진을 제어
-API_PREFIX = os.getenv("API_AI_PREFIX", "/v1")
+API_PREFIX = os.getenv("API_AI_PREFIX", "/ml")
 # 여러 개면 콤마로 구분: "http://localhost:5173,http://127.0.0.1:5173"
 # _frontends = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173") # 개발용
 # ALLOWED_ORIGINS = [o.strip() for o in _frontends.split(",") if o.strip()]
@@ -28,9 +28,10 @@ app.add_middleware(
 # 라우터 예시 -> router 객체 넘기기
 # 예시: demo.py 파일에 작성한 라우터
 app.include_router(demo.router, prefix=API_PREFIX, tags=["demo"])
+
 # ohgoodscore.py 파일에 작성한 라우터
-app.include_router(score.router)
-app.include_router(spending.router)
+app.include_router(score.router, prefix=API_PREFIX)
+app.include_router(spending.router, prefix=API_PREFIX)
 # app.include_router(bnpl.router,     prefix=API_PREFIX, tags=["bnpl"])
 # app.include_router(spending.router, prefix=API_PREFIX, tags=["spending"])
 # app.include_router(advice.router,   prefix=API_PREFIX, tags=["advice"])
