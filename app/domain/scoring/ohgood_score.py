@@ -1,4 +1,4 @@
-# ohgood_score.py
+# scoring/ohgood_score.py
 from dataclasses import dataclass, asdict
 from typing import List, Dict, Optional
 import json
