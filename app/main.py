@@ -2,8 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import ohgood_score_comment, spending_history_3m
-from app.routers import demo, score, spending
-
+from app.routers import demo, score, spending, narratives 
 
 # 라우터: 파일 만들어 둔 경우에만 임포트 (미작성 시 주석 처리)
 # from app.routers import bnpl, spending, advice
@@ -35,13 +34,12 @@ app.include_router(score.router, prefix=API_PREFIX)
 app.include_router(spending.router, prefix=API_PREFIX)
 app.include_router(ohgood_score_comment.router, prefix=API_PREFIX)
 app.include_router(spending_history_3m.router, prefix=API_PREFIX)  
-# app.include_router(bnpl.router,     prefix=API_PREFIX, tags=["bnpl"])
-# app.include_router(spending.router, prefix=API_PREFIX, tags=["spending"])
-# app.include_router(advice.router,   prefix=API_PREFIX, tags=["advice"])
+
+# narratives.py 파일에 작성한 라우터
+app.include_router(narratives.router, prefix=API_PREFIX)
+
 
 # 간단 핑 엔드포인트 — 필요 없으면 삭제 가능
 @app.get(API_PREFIX + "/ping")
 def ping():
     return {"service": "ohgoodpay-ai", "status": "ok"}
-
-
