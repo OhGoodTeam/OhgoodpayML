@@ -5,6 +5,7 @@ from app.schemas.chat.start_chat_request import StartChatRequest
 from app.schemas.chat.input_mood_request import InputMoodRequest
 from app.schemas.chat.check_hobby_request import CheckHobbyRequest
 from app.schemas.chat.update_hobby_request import UpdateHobbyRequest
+from app.schemas.chat.purchases_analyze_request import PurchasesAnalyzeRequest
 from app.schemas.chat.basic_chat_response import BasicChatResponse
 from app.domain.chat.chat_service import ChatService
 
@@ -92,7 +93,6 @@ def hobby_check_chat(
         # 500 에러 (서버 내부 오류)
         raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
 
-
 # 변경된 취미 확인 api
 @router.post(
     "/hobby-update",
@@ -107,6 +107,32 @@ def hobby_update_chat(
     try:
         # Service 호출
         response = chat_service.generate_new_hobby_message(request)
+        
+        # 성공 응답
+        return response
+        
+    except ValueError as e:
+        # 400 에러 (잘못된 요청)
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    except Exception as e:
+        # 500 에러 (서버 내부 오류)
+        raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
+
+# 최근 구매 카테고리 분석 api
+@router.post(
+    "/analyze-purchases",
+    response_model=BasicChatResponse,
+    summary="최근 구매한 카테고리 분석하는 채팅",
+    description="고객의 최근 구매한 카테고리 받아서 개인화된 채팅 메시지 반환",
+)
+def analyze_purchases_chat(
+    request: PurchasesAnalyzeRequest,
+    chat_service: ChatService = Depends(lambda: ChatService())
+):
+    try:
+        # Service 호출
+        response = chat_service.generate_recent_purchases_message(request)
         
         # 성공 응답
         return response
