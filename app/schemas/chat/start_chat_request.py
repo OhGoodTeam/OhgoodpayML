@@ -7,7 +7,6 @@ class StartChatRequest(BaseLlmRequest):
     
     채팅 세션을 시작하기 위한 요청 데이터
     """
-    
     @classmethod
     def of(cls, customer_id: int, name: str) -> "StartChatRequest" :
         return cls(
