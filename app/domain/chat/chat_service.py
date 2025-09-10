@@ -1,4 +1,5 @@
 from app.schemas.chat.start_chat_request import StartChatRequest
+from app.schemas.chat.input_mood_request import InputMoodRequest
 from app.schemas.chat.basic_chat_response import BasicChatResponse
 
 """
@@ -31,6 +32,18 @@ class ChatService:
         """
         # TODO: 실제 LLM 호출로 변경
         message = f"안녕 나는 너만의 오레이봉봉 ~ 나를 레이라고 불러줘 {request.name}~ 오늘 기분은 어때?"
+        
+        return BasicChatResponse.of(
+            message=message
+        )
+
+    def generate_mood_message(self, request: InputMoodRequest) -> BasicChatResponse:
+        """
+        초기 채팅 메시지 생성
+        현재는 하드코딩, 추후 LLM 연동 예정
+        """
+        # TODO: 실제 LLM 호출로 변경
+        message = f"{request.name}이가 기분이 좋다니 나도 좋은걸~ 그럼 오늘 뭐가 필요한지 알아볼까?"
         
         return BasicChatResponse.of(
             message=message
