@@ -1,7 +1,8 @@
 from app.schemas.chat.start_chat_request import StartChatRequest
 from app.schemas.chat.input_mood_request import InputMoodRequest
-from app.schemas.chat.basic_chat_response import BasicChatResponse
 from app.schemas.chat.check_hobby_request import CheckHobbyRequest
+from app.schemas.chat.update_hobby_request import UpdateHobbyRequest
+from app.schemas.chat.basic_chat_response import BasicChatResponse
 
 """
 Chat domain module
@@ -61,3 +62,16 @@ class ChatService:
         return BasicChatResponse.of(
             message=message
         )
+
+    def generate_new_hobby_message(self, request: UpdateHobbyRequest) -> BasicChatResponse:
+        """
+        취미 업데이트 메시지 생성
+        현재는 하드코딩, 추후 LLM 연동 예정
+        """
+        # TODO: 실제 LLM 호출로 변경
+        message = f"{request.new_hobby}에 관심생겼구나! 좋은 선택이야~"
+        
+        return BasicChatResponse.of(
+            message=message
+        )
+
