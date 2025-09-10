@@ -8,7 +8,7 @@ class InputMoodRequest(BaseLlmRequest):
     mood: str  # 고객의 기분 (예: "좋음", "나쁨", "보통")
 
     @classmethod
-    def of(cls, customer_id: int, name: str, mood: str) -> "StartChatRequest" :
+    def of(cls, customer_id: int, name: str, mood: str) -> "InputMoodRequest" :
         return cls(
             customer_id=customer_id,
             name=name,

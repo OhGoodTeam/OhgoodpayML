@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from app.schemas.chat.basic_chat_response import BasicChatResponse
 from app.schemas.chat.start_chat_request import StartChatRequest
 from app.schemas.chat.input_mood_request import InputMoodRequest
+from app.schemas.chat.check_hobby_request import CheckHobbyRequest
 from app.domain.chat.chat_service import ChatService
 
 router = APIRouter(
@@ -10,6 +11,7 @@ router = APIRouter(
     tags=["추천 채팅"]
 )
 
+# 채팅 시작 api
 @router.post(
     "/greeting",
     response_model=BasicChatResponse,
@@ -36,7 +38,7 @@ def start_chat(
         # 500 에러 (서버 내부 오류)
         raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
 
-
+# 기분 확인 api
 @router.post(
     "/mood-response",
     response_model=BasicChatResponse,
@@ -50,6 +52,32 @@ def mood_chat(
     try:
         # Service 호출
         response = chat_service.generate_mood_message(request)
+        
+        # 성공 응답
+        return response
+        
+    except ValueError as e:
+        # 400 에러 (잘못된 요청)
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    except Exception as e:
+        # 500 에러 (서버 내부 오류)
+        raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
+
+# 기존 취미 확인 api
+@router.post(
+    "/hobby-check",
+    response_model=BasicChatResponse,
+    summary="기존 취미 확인 채팅",
+    description="고객 기존 취미 받아서 개인화된 채팅 메시지 반환",
+)
+def mood_chat(
+    request: CheckHobbyRequest,
+    chat_service: ChatService = Depends(lambda: ChatService())
+):
+    try:
+        # Service 호출
+        response = chat_service.generate_current_hobby_message(request)
         
         # 성공 응답
         return response
