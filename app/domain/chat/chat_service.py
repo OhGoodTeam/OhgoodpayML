@@ -3,6 +3,7 @@ from app.schemas.chat.input_mood_request import InputMoodRequest
 from app.schemas.chat.check_hobby_request import CheckHobbyRequest
 from app.schemas.chat.update_hobby_request import UpdateHobbyRequest
 from app.schemas.chat.purchases_analyze_request import PurchasesAnalyzeRequest
+from app.schemas.chat.recommend_message_request import RecommendMessageRequest
 from app.schemas.chat.basic_chat_response import BasicChatResponse
 
 """
@@ -78,7 +79,7 @@ class ChatService:
 
     def generate_recent_purchases_message(self, request: PurchasesAnalyzeRequest) -> BasicChatResponse:
         """
-        취미 업데이트 메시지 생성
+        최근 구매한 카테고리 분석 메시지 생성
         현재는 하드코딩, 추후 LLM 연동 예정
         """
         # TODO: 실제 LLM 호출로 변경
@@ -87,4 +88,17 @@ class ChatService:
         return BasicChatResponse.of(
             message=message
         )
+
+    def generate_recommend_message(self, request: RecommendMessageRequest) -> BasicChatResponse:
+        """
+        상품 추천 메세지 작성
+        현재는 하드코딩, 추후 LLM 연동 예정
+        """
+        # TODO: 실제 LLM 호출로 변경
+        message = f"{request.name}가 {request.consumer_context.hobby}에 관심생겼다니까 완전 찰떡인 {request.product.name}찾았어!"
+        
+        return BasicChatResponse.of(
+            message=message
+        )
+
 
