@@ -6,6 +6,7 @@ from app.schemas.chat.input_mood_request import InputMoodRequest
 from app.schemas.chat.check_hobby_request import CheckHobbyRequest
 from app.schemas.chat.update_hobby_request import UpdateHobbyRequest
 from app.schemas.chat.purchases_analyze_request import PurchasesAnalyzeRequest
+from app.schemas.chat.recommend_message_request import RecommendMessageRequest
 from app.schemas.chat.basic_chat_response import BasicChatResponse
 from app.domain.chat.chat_service import ChatService
 
@@ -144,3 +145,31 @@ def analyze_purchases_chat(
     except Exception as e:
         # 500 에러 (서버 내부 오류)
         raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
+
+# 고객 맞춤 상품 추천 관련 api
+@router.post(
+    "/recommend-message",
+    response_model=BasicChatResponse,
+    summary="고객 맞춤 상품 분석하는 채팅",
+    description="고객 맞춤 상품 추천 받아서 개인화된 채팅 메시지 반환",
+)
+def recommend_chat(
+    request: RecommendMessageRequest,
+    chat_service: ChatService = Depends(lambda: ChatService())
+):
+    try:
+        # Service 호출
+        response = chat_service.generate_recommend_message(request)
+        
+        # 성공 응답
+        return response
+        
+    except ValueError as e:
+        # 400 에러 (잘못된 요청)
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    except Exception as e:
+        # 500 에러 (서버 내부 오류)
+        raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
+
+
