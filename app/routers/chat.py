@@ -22,7 +22,7 @@ router = APIRouter(
     summary="채팅 시작",
     description="고객 ID로 채팅 시작 후 개인화된 인사 메시지 반환",
 )
-def start_chat(
+async def start_chat(
     request: StartChatRequest,
     chat_service: ChatService = Depends(lambda: ChatService())
 ):
@@ -32,7 +32,7 @@ def start_chat(
         response = chat_service.generate_start_message(request)
         
         # 성공 응답
-        return response
+        return await response
         
     except ValueError as e:
         # 400 에러 (잘못된 요청)

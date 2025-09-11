@@ -5,6 +5,7 @@ from app.schemas.chat.update_hobby_request import UpdateHobbyRequest
 from app.schemas.chat.purchases_analyze_request import PurchasesAnalyzeRequest
 from app.schemas.chat.recommend_message_request import RecommendMessageRequest
 from app.schemas.chat.basic_chat_response import BasicChatResponse
+from app.config.openai_config import openai_config
 
 """
 Chat domain module
@@ -13,29 +14,43 @@ Chat domain module
 llm 연동으로 채팅 메세지를 생성하는 역할을 담당
 """
 class ChatService:
-    # async def generate_start_message_with_llm(self, request: StartChatRequest) -> StartChatResponse:
-    #     """
-    #     나중에 LLM 연동용 메서드
-    #     """
-    #     # TODO: 실제 LLM API 호출
-    #     # llm_response = await llm_client.generate_greeting(request.name)
+    
+    async def _generate_llm_response(self, system_message: str, user_message: str) -> str:
+        """
+        OpenAI LLM을 사용하여 응답 생성
+        """
+        try:
+            client = openai_config.get_client()
+            params = openai_config.get_chat_completion_params(
+                system_message=system_message,
+                user_message=user_message
+            )
+            
+            response = await client.chat.completions.create(**params)
+            return response.choices[0].message.content
+        except Exception as e:
+            # LLM 호출 실패시 기본 메시지 반환
+            print(f"LLM 호출 실패: {e}")
+            return "죄송해요, 잠시 문제가 생겼어요. 다시 시도해주세요."
         
-    #     # 현재는 Mock
-    #     message = f"[LLM 응답] 안녕하세요 {request.name}님!"
-        
-    #     return StartChatResponse(
-    #         message=message,
-    #         success=True,
-    #         customer_id=request.customer_id
-    #     )
-        
-    def generate_start_message(self, request: StartChatRequest) -> BasicChatResponse:
+    async def generate_start_message(self, request: StartChatRequest) -> BasicChatResponse:
         """
         초기 채팅 메시지 생성
-        현재는 하드코딩, 추후 LLM 연동 예정
+        LLM을 사용하여 개인화된 인사 메시지 생성
         """
-        # TODO: 실제 LLM 호출로 변경
-        message = f"안녕 나는 너만의 오레이봉봉 ~ 나를 레이라고 불러줘 {request.name}~ 오늘 기분은 어때?"
+        
+        # 챗봇 메세지 생성을 위한 프롬프터
+        system_message = """
+        당신은 친근하고 활발한 도우미 '레이'입니다. 
+        사용자에게 친근하게 인사하고 오늘의 기분을 물어보세요.
+        반말을 사용하고 이모티콘을 적절히 활용해주세요.
+        또한, 자신이 사용자의 개인 도우미 라는 것을 강조하세요.
+        자신의 이름인 '레이'를 언급해주세요.
+        """
+        
+        user_message = f"사용자 이름: {request.name}. 이 사용자에게 첫 인사를 해주세요."
+        
+        message = await self._generate_llm_response(system_message, user_message)
         
         return BasicChatResponse.of(
             message=message
