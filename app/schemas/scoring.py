@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import List, Optional
 
 # profile 문자열
@@ -36,3 +36,24 @@ class ScoreResultOut(BaseModel):
     to_next_grade_points: int
     top_negative: List[ReasonOut]
     top_positive: Optional[ReasonOut]
+
+class SayMyNameIn(InputFeaturesIn):  # ← 기존 점수 입력 스키마 상속
+    # 스프링이 같이 보내주는 컨텍스트(선택)
+    customer_id: Optional[str] = Field(default=None, alias="customerId")
+    username: Optional[str] = None
+    grade: Optional[str] = None
+    ohgood_score: Optional[int] = Field(default=None, alias="ohgoodScore")
+
+    # camelCase/snake_case 모두 허용
+    model_config = ConfigDict(populate_by_name=True, extra="allow")
+
+    # 스프링이 숫자로 보낼 수도 있어서 문자열로 정규화
+    @field_validator("customer_id", mode="before")
+    def _id_to_str(cls, v):
+        return None if v is None else str(v)
+
+class SayMyNameOut(BaseModel):
+    message: str
+    sessionId: str
+    ttlSeconds: int
+    score: int
