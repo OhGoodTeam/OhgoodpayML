@@ -6,7 +6,7 @@ from uuid import uuid4
 from app.schemas.scoring import SayMyNameIn, SayMyNameOut, InputFeaturesIn, ScoreProfile
 from app.domain.scoring.ohgood_score import InputFeatures, OGoodScoreMin
 
-log = logging.getLogger("ohgood.score")  # uvicorn --log-level debug 와 함께 사용 권장
+log = logging.getLogger("ohgood.score") 
 router = APIRouter(prefix="/dash", tags=["dash"])
 
 def make_oneliner(name: str, grade: str | None, score: int) -> str:
@@ -44,7 +44,7 @@ def say_my_name(
         grade_limit   = res.limit
         point_percent = res.point_percent
 
-        # 한줄평(현재는 LLM 스텁)
+        # 한줄평
         name = payload.username or payload.customer_id or "guest"
         msg  = make_oneliner(name, payload.grade, score)
 
@@ -52,7 +52,7 @@ def say_my_name(
         return SayMyNameOut(
             message=f"{msg}",
             score=score,
-            userId=str(payload.customer_id),   # 필요 시 "u_{id}" 형태로 바꿔도 됨
+            userId=str(payload.customer_id),   
             gradeName=grade_name,
             gradeLimit=grade_limit,
             pointPercent=point_percent,
