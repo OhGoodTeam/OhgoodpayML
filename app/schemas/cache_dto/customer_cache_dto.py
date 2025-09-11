@@ -14,3 +14,5 @@ class CustomerCacheDto(BaseModel):
     class Config:
         # alias를 통해 JSON 필드명 매핑
         allow_population_by_field_name = True
+
+    # TODO : 시간나면 여기도 정적 메서드 작성하기

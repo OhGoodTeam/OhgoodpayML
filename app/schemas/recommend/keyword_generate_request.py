@@ -1,7 +1,7 @@
 from pydantic import Field
 from pydantic import BaseModel
 from typing import Optional
-from app.schemas.recommend.customer_cache_dto import CustomerCacheDto
+from app.schemas.cache_dto.customer_cache_dto import CustomerCacheDto
 
 class KeywordGenerateRequest(BaseModel):
     """
