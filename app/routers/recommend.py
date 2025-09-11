@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.schemas.recommend.keyword_generate_request import KeywordGenerateRequest
 from app.schemas.recommend.keyword_generate_response import KeywordGenerateResponse
+from app.schemas.recommend.product_search_request import ProductSearchRequest
+from app.schemas.recommend.product_search_response import ProductSearchResponse
 from app.domain.recommend.recommend_service import RecommendService
 
 router = APIRouter(
@@ -23,6 +25,34 @@ def generate_keywords(
     try:
         # Service 호출
         response = recommend_service.generate_keywords(request)
+        
+        # 성공 응답
+        return response
+        
+    except ValueError as e:
+        # 400 에러 (잘못된 요청)
+        raise HTTPException(status_code=400, detail=str(e))
+    
+    except Exception as e:
+        # 500 에러 (서버 내부 오류)
+        raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
+
+
+# 추천 상품을 얻기 위한 키워드 api
+@router.post(
+    "/search",
+    response_model=ProductSearchResponse,
+    summary="추천 상품 받기",
+    description="키워드를 바탕으로 추천 상품을 받는다.",
+)
+def search_products(
+    request: ProductSearchRequest,
+    recommend_service: RecommendService = Depends(lambda: RecommendService())
+):
+    """채팅 시작 API - 고객 ID로 개인화된 인사 메시지 생성"""
+    try:
+        # Service 호출
+        response = recommend_service.search_products(request)
         
         # 성공 응답
         return response
