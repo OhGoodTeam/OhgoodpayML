@@ -78,7 +78,6 @@ def aggregate_3m(transactions: List[Txn]) -> Dict:
 
     by_month_total: Dict[str, float] = defaultdict(float)
     by_month_main: Dict[str, Dict[str, float]] = defaultdict(lambda: defaultdict(float))
-    main_3m_total: Dict[str, float] = defaultdict(float)
 
     # 월별/전체 Top 트랜잭션 
     month_txns: Dict[str, List[Dict]] = defaultdict(list)
@@ -91,14 +90,13 @@ def aggregate_3m(transactions: List[Txn]) -> Dict:
 
         by_month_total[ym] += amt
         by_month_main[ym][main_cat] += amt
-        main_3m_total[main_cat] += amt
 
         dto = {
             "id": t.id,
             "ts": t.ts,
             "merchant_name": t.merchant_name,
             "amount": round(amt, 2),
-            "category": main_cat,  
+            "category": main_cat,
         }
         month_txns[ym].append(dto)
         all_txns.append(dto)
@@ -111,19 +109,22 @@ def aggregate_3m(transactions: List[Txn]) -> Dict:
         mains = {c: round(v, 2) for c, v in mains_sorted}
         shares = {c: (v / total if total else 0.0) for c, v in mains.items()}
 
-        # 월별 Top3 결제 내역 
+        # 월별 Top3 결제 내역
         top_tx = sorted(month_txns[ym], key=lambda x: (-x["amount"], x["ts"]))[:3]
+
+        # 월별 Top3 카테고리
+        top_cats_month = [
+            {"category": c, "amount": round(v, 2), "share": round(shares[c], 4)}
+            for c, v in mains_sorted[:3]
+        ]
 
         summary.append({
             "month": ym,
             "total_spend": total,
             "by_category": mains,
             "category_share": {k: round(v, 4) for k, v in shares.items()},
-            "top_categories": [
-                {"category": c, "amount": round(v, 2), "share": round(shares[c], 4)}
-                for c, v in mains_sorted[:3]
-            ],
-            "top_transactions": top_tx,  
+            "top_categories": top_cats_month,       # ⬅️ 월별 Top3 카테고리
+            "top_transactions": top_tx,             # ⬅️ 월별 Top3 결제
         })
 
     # MoM
@@ -144,14 +145,10 @@ def aggregate_3m(transactions: List[Txn]) -> Dict:
             if z_last >= 1.5:
                 spikes.append({"month": months[-1], "zscore": round(z_last, 2)})
 
-    # 3개월 합산 Top3 카테고리(메인)
-    main_3m_sorted = sorted(main_3m_total.items(), key=lambda kv: -kv[1])
-    total_3m = sum(main_3m_total.values())
-    top_categories_3m = [{
-        "category": c,
-        "amount": round(v, 2),
-        "share": round((v / total_3m if total_3m else 0.0), 4)
-    } for c, v in main_3m_sorted[:3]]
+    # 최상위에도 월별 Top3 카테고리를 한 번에 제공 (프론트에서 접근 용이)
+    top_categories_by_month = {
+        s["month"]: s["top_categories"] for s in summary
+    }
 
     # 3개월 합산 Top3 결제 내역
     top_transactions_3m = sorted(all_txns, key=lambda x: (-x["amount"], x["ts"]))[:3]
@@ -160,6 +157,6 @@ def aggregate_3m(transactions: List[Txn]) -> Dict:
         "months": summary,
         "mom_growth": mom,
         "spikes": spikes,
-        "top_categories_3m": top_categories_3m,
-        "top_transactions_3m": top_transactions_3m,  
+        "top_categories_by_month": top_categories_by_month,
+        "top_transactions_3m": top_transactions_3m,
     }
