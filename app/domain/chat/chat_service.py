@@ -51,5 +51,7 @@ class ChatService:
         
         return BasicChatResponse.of(
             message=message,
-            session_id=request.session_id
+            session_id=request.session_id,
+            new_hobby="", #일단, 지금은 이거 판단해서 저장하는 로직이 없어서 이게 맞음.
+            should_update_hobby_DB=False
         )

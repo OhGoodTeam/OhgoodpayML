@@ -12,7 +12,6 @@ class BasicChatRequest(BaseModel):
     
     session_id: str = Field(..., alias="sessionId", description="채팅 redis 저장을 위한 세션 아이디")
     customer_info: CustomerCacheDto = Field(..., alias="customerInfo", description="채팅 생성 요청을 위한 고객 기본 정보")
-    category: str = Field(..., description="채팅 생성 요청을 위한 고객 선호 카테고리")
     mood: str = Field(..., description="채팅 생성 요청을 위한 고객 현재 기분")
     hobby: str = Field(..., description="채팅 생성 요청을 위한 고객 취미")
     balance: int = Field(..., description="채팅 생성 요청을 위한 고객 현재 잔액")
@@ -29,7 +28,6 @@ class BasicChatRequest(BaseModel):
         customer_info: CustomerCacheDto,
         mood: str,
         hobby: str,
-        category: str,
         balance: int,
         cached_messages: List[CachedMessageDto]
     ) -> "BasicChatRequest":
@@ -41,7 +39,6 @@ class BasicChatRequest(BaseModel):
             customer_info=customer_info,
             mood=mood,
             hobby=hobby,
-            category=category,
             balance=balance,
             cached_messages=cached_messages
         )

@@ -21,3 +21,4 @@ websockets==15.0.1
 wheel==0.45.1
 tzdata
 openai==1.51.0
+redis==5.0.1

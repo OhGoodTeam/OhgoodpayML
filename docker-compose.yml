@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  redis:
+    build:
+      context: ./redis-docker
+      dockerfile: Dockerfile
+    container_name: ohgoodpay-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis-docker/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    restart: unless-stopped
+    networks:
+      - ohgoodpay-network
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  ohgoodpay-network:
+    driver: bridge
