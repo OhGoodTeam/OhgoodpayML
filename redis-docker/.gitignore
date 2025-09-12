@@ -1,0 +1,50 @@
+### Build output
+/target/
+/build/
+/out/
+/.gradle/
+
+### IDE
+/.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+### Java/JVM
+*.class
+hs_err_pid*
+replay_pid*
+
+### Logs
+/logs/
+*.log
+
+### OS
+.DS_Store
+Thumbs.db
+
+### Tools / wrappers
+# keep wrappers even though *.jar is ignored
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+### Archives
+*.jar
+*.war
+
+### QueryDSL / generated sources
+/src/main/generated/
+
+### Config (keep defaults, ignore only local/secrets)
+# DO NOT ignore all *.yml/*.properties
+# application.yml, application-prod.yml 등은 커밋 대상
+application-local.yml
+application-*-local.yml
+*-secret.yml
+*.env
+.env
+.env.*
+redis.conf

@@ -1,4 +1,3 @@
-from app.schemas.base_dto.base_llm_response import BaseLlmResponse
 from typing import Optional
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -10,12 +9,17 @@ class BasicChatResponse(BaseModel):
     """
     model_config = ConfigDict(populate_by_name=True)
 
-    message: str = Field(..., description="llm에서 응답한 chat message")
     session_id: str = Field(..., alias="sessionId", description="llm에서 응답한 chat message")
+    message: str = Field(..., description="llm에서 응답한 chat message")
+
+    new_hobby: str = Field(..., alias="newHobby", description="새로 바뀐 취미")
+    should_update_hobby_DB: bool = Field(..., alias="shouldUpdateHobbyDB", description="llm에서 응답한 chat message")
     
     @classmethod
-    def of(cls, message: str, session_id:str) -> "BasicChatResponse":
+    def of(cls, message: str, session_id:str, new_hobby:str, should_update_hobby_DB:bool) -> "BasicChatResponse":
         return cls(
+            session_id=session_id,
             message=message,
-            session_id=session_id
+            new_hobby=new_hobby,
+            should_update_hobby_DB=should_update_hobby_DB
         )
