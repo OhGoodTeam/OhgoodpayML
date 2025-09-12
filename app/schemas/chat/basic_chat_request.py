@@ -15,6 +15,7 @@ class BasicChatRequest(BaseModel):
     mood: str = Field(..., description="채팅 생성 요청을 위한 고객 현재 기분")
     hobby: str = Field(..., description="채팅 생성 요청을 위한 고객 취미")
     balance: int = Field(..., description="채팅 생성 요청을 위한 고객 현재 잔액")
+    input_message: str = Field(..., alias="inputMessage", description="사용자가 입력한 메세지")
     cached_messages: List[CachedMessageDto] = Field(..., alias="cachedMessages", description="이전 대화 내용들")
     
     class Config:
@@ -29,6 +30,7 @@ class BasicChatRequest(BaseModel):
         mood: str,
         hobby: str,
         balance: int,
+        input_message: str,
         cached_messages: List[CachedMessageDto]
     ) -> "BasicChatRequest":
         """
@@ -40,5 +42,6 @@ class BasicChatRequest(BaseModel):
             mood=mood,
             hobby=hobby,
             balance=balance,
+            input_message=input_message,
             cached_messages=cached_messages
         )

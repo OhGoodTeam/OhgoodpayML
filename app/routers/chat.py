@@ -20,10 +20,6 @@ async def generate_chat(
     request: BasicChatRequest,
     chat_service: ChatService = Depends(lambda: ChatService())
 ):
-    # 연결 test용 print
-    print("=== RECEIVED REQUEST ===")
-    print(f"Request: {request}")
-    
     # 채팅 API
     try:
         # Service 호출

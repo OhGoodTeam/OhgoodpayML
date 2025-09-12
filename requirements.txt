@@ -22,3 +22,4 @@ wheel==0.45.1
 tzdata
 openai==1.51.0
 redis==5.0.1
+tiktoken==0.7.0
