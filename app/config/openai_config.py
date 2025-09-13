@@ -12,18 +12,22 @@ class OpenAIConfig:
     
     def __init__(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
-        self.model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        # self.model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        self.model = os.getenv("OPENAI_MODEL", "gpt-3.5-turbo")
         self.max_tokens = int(os.getenv("OPENAI_MAX_TOKENS", "1000"))
         self.temperature = float(os.getenv("OPENAI_TEMPERATURE", "0.7"))
+        self._client: Optional[AsyncOpenAI] = None
         
         if not self.api_key:
             raise ValueError("OPENAI_API_KEY 환경변수가 설정되지 않았습니다.")
     
     def get_client(self) -> AsyncOpenAI:
         """
-        OpenAI 비동기 클라이언트 반환
+        OpenAI 비동기 클라이언트 반환 (싱글톤)
         """
-        return AsyncOpenAI(api_key=self.api_key)
+        if self._client is None:
+            self._client = AsyncOpenAI(api_key=self.api_key)
+        return self._client
     
     def get_chat_completion_params(self, system_message: str = None, user_message: str = None) -> dict:
         """
