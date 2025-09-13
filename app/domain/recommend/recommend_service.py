@@ -1,5 +1,3 @@
-from app.schemas.recommend.keyword_generate_request import KeywordGenerateRequest
-from app.schemas.recommend.keyword_generate_response import KeywordGenerateResponse
 from app.schemas.recommend.product_search_request import ProductSearchRequest
 from app.schemas.recommend.product_search_response import ProductSearchResponse
 from app.schemas.recommend.product_dto import ProductDto
@@ -69,39 +67,42 @@ class RecommendService:
             # 기본값 반환
             return f"{hobby} 관련 상품", "10000-50000"
 
-    def search_products(self, request: ProductSearchRequest) -> ProductSearchResponse:
+    async def generate_keywords_async(self, hobby: str, mood: str, credit_limit: int, balance: int) -> tuple[str, str]:
         """
-        추천 상품 response
-        현재는 하드코딩, 추후 LLM 연동 예정
+        내부 서비스용: 키워드와 가격대 생성
         """
-        # TODO: 실제 LLM 호출 & 네이버 쇼핑 api로 변경
+        return await self._generate_llm_keywords(hobby, mood, credit_limit, balance)
+    
+
+    async def search_products_async(self, keyword: str, price_range: str) -> list[ProductDto]:
+        """
+        내부 서비스용: 상품 검색
+        """
+        # TODO: 네이버 쇼핑 API 연동
         mock_products = [
             ProductDto(
                 rank=1,
-                name="쿠킹 스푼 세트",
+                name=f"{keyword} 관련 상품 1",
                 price=15000,
                 image="http://example.com/image1.jpg",
                 url="http://example.com/product1",
-                category="주방용품"
+                category="추천상품"
             ),
             ProductDto(
                 rank=2,
-                name="논스틱 프라이팬",
+                name=f"{keyword} 관련 상품 2",
                 price=30000,
                 image="http://example.com/image2.jpg",
                 url="http://example.com/product2",
-                category="주방용품"
+                category="추천상품"
             ),
             ProductDto(
                 rank=3,
-                name="스테인레스 냄비",
+                name=f"{keyword} 관련 상품 3",
                 price=45000,
                 image="http://example.com/image3.jpg",
                 url="http://example.com/product3",
-                category="주방용품"
+                category="추천상품"
             )
         ]
-        
-        return ProductSearchResponse.of(
-            products=mock_products
-        )
+        return mock_products

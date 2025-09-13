@@ -57,6 +57,44 @@ class RedisService:
             logger.error(f"Mood 조회 실패: session_id={session_id}, error={e}")
             return None
     
+    # === HOBBY 저장/조회 ===
+    
+    def save_user_hobby(self, session_id: str, hobby: str) -> bool:
+        """사용자 hobby 저장"""
+        try:
+            key = f"user_hobby:{session_id}"
+            hobby_data = {
+                "hobby": hobby,
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            self.redis_client.setex(
+                key, 
+                timedelta(hours=24), 
+                json.dumps(hobby_data, ensure_ascii=False)
+            )
+            logger.info(f"Hobby 저장 성공: session_id={session_id}, hobby={hobby}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Hobby 저장 실패: session_id={session_id}, error={e}")
+            return False
+    
+    def get_user_hobby(self, session_id: str) -> Optional[str]:
+        """사용자 hobby 조회"""
+        try:
+            key = f"user_hobby:{session_id}"
+            stored_data = self.redis_client.get(key)
+            
+            if stored_data:
+                hobby_data = json.loads(stored_data)
+                return hobby_data["hobby"]
+            return None
+                
+        except Exception as e:
+            logger.error(f"Hobby 조회 실패: session_id={session_id}, error={e}")
+            return None
+    
     # === MESSAGE 저장/조회 (토큰 단위) ===
     
     def save_message(self, session_id: str, role: str, content: str) -> bool:
@@ -124,7 +162,7 @@ class RedisService:
     def clear_session(self, session_id: str) -> bool:
         """세션 데이터 삭제"""
         try:
-            keys = [f"user_mood:{session_id}", f"chat_messages:{session_id}"]
+            keys = [f"user_mood:{session_id}", f"user_hobby:{session_id}", f"chat_messages:{session_id}"]
             self.redis_client.delete(*keys)
             logger.info(f"세션 삭제 성공: session_id={session_id}")
             return True
