@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
 class ProductDto(BaseModel):
@@ -13,7 +13,10 @@ class ProductDto(BaseModel):
     image: str = Field(description="이미지 url")
     url: str = Field(description="링크")
     category: str = Field(description="카테고리")
+
+    # v2 방식
+    model_config = ConfigDict(populate_by_name=True)
         
-    class Config:
-        # alias를 통해 JSON 필드명 매핑
-        allow_population_by_field_name = True
+    # class Config:
+    #     # alias를 통해 JSON 필드명 매핑
+    #     allow_population_by_field_name = True
