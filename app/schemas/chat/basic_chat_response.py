@@ -1,5 +1,6 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field, ConfigDict
+from app.schemas.recommend.product_dto import ProductDto
 
 class BasicChatResponse(BaseModel):
     """
@@ -15,11 +16,14 @@ class BasicChatResponse(BaseModel):
     new_hobby: str = Field(..., alias="newHobby", description="새로 바뀐 취미")
     should_update_hobby_DB: bool = Field(..., alias="shouldUpdateHobbyDB", description="llm에서 응답한 chat message")
     
+    products: Optional[List[ProductDto]] = Field(default=None, description="추천 상품 목록")
+    
     @classmethod
-    def of(cls, message: str, session_id:str, new_hobby:str, should_update_hobby_DB:bool) -> "BasicChatResponse":
+    def of(cls, message: str, session_id:str, new_hobby:str, should_update_hobby_DB:bool, products: Optional[List[ProductDto]] = None) -> "BasicChatResponse":
         return cls(
             session_id=session_id,
             message=message,
             new_hobby=new_hobby,
-            should_update_hobby_DB=should_update_hobby_DB
+            should_update_hobby_DB=should_update_hobby_DB,
+            products=products
         )

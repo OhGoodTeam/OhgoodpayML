@@ -1,9 +1,16 @@
 import os
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import ohgood_score_comment, spending_history_3m
 from app.routers import demo, score, spending
 from app.routers import chat, recommend
+
+# 로깅 설정
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 
 # 라우터: 파일 만들어 둔 경우에만 임포트 (미작성 시 주석 처리)
