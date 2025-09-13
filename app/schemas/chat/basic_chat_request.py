@@ -1,7 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional
 from app.schemas.cache_dto.customer_cache_dto import CustomerCacheDto
-from app.schemas.cache_dto.cache_message_dto import CachedMessageDto
 
 class BasicChatRequest(BaseModel):
     """
@@ -16,7 +14,8 @@ class BasicChatRequest(BaseModel):
     hobby: str = Field(..., description="채팅 생성 요청을 위한 고객 취미")
     balance: int = Field(..., description="채팅 생성 요청을 위한 고객 현재 잔액")
     input_message: str = Field(..., alias="inputMessage", description="사용자가 입력한 메세지")
-    cached_messages: List[CachedMessageDto] = Field(..., alias="cachedMessages", description="이전 대화 내용들")
+    summary: str = Field(..., description="Spring Boot에서 관리하는 대화 요약본")
+    next_flow: str = Field(..., alias="nextFlow", description="Spring Boot에서 관리하는 다음 채팅 플로우 상태")
     
     class Config:
         # camelCase alias 허용
@@ -31,7 +30,8 @@ class BasicChatRequest(BaseModel):
         hobby: str,
         balance: int,
         input_message: str,
-        cached_messages: List[CachedMessageDto]
+        summary: str,
+        next_flow: str
     ) -> "BasicChatRequest":
         """
         BasicChatRequest 생성을 위한 팩토리 메서드
@@ -43,5 +43,6 @@ class BasicChatRequest(BaseModel):
             hobby=hobby,
             balance=balance,
             input_message=input_message,
-            cached_messages=cached_messages
+            summary=summary,
+            next_flow=next_flow
         )
