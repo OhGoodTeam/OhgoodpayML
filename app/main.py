@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import ohgood_score_comment, spending_history_3m
 from app.routers import demo, score, spending
-from app.routers import chat
+from app.routers import chat, image_proxy
 
 # 로깅 설정
 logging.basicConfig(
@@ -45,7 +45,10 @@ app.include_router(ohgood_score_comment.router, prefix=API_PREFIX)
 app.include_router(spending_history_3m.router, prefix=API_PREFIX)  
 
 # 채팅 라우터
-app.include_router(chat.router, prefix=API_PREFIX) 
+app.include_router(chat.router, prefix=API_PREFIX)
+
+# 이미지 프록시 라우터
+app.include_router(image_proxy.router, prefix=API_PREFIX) 
 
 # app.include_router(bnpl.router,     prefix=API_PREFIX, tags=["bnpl"])
 # app.include_router(spending.router, prefix=API_PREFIX, tags=["spending"])
