@@ -23,15 +23,19 @@ async def generate_chat(
     # 채팅 API
     try:
         # Service 호출
-        response = chat_service.generate_chat(request)
+        response = await chat_service.generate_chat(request)
         
         # 성공 응답
-        return await response
-        
+        return response
+    
+    # TODO : [MVP 1차 이후] ERROR를 어떻게 세분화 할 것인지는 고민 필요
     except ValueError as e:
         # 400 에러 (잘못된 요청)
         raise HTTPException(status_code=400, detail=str(e))
     
     except Exception as e:
-        # 500 에러 (서버 내부 오류)
-        raise HTTPException(status_code=500, detail="서버 내부 오류가 발생했습니다")
+        # 500 에러 (서버 내부 오류) - 에러 로깅 추가
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Chat API 에러: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"서버 내부 오류: {str(e)}")

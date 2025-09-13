@@ -1,5 +1,3 @@
-from app.schemas.recommend.product_search_request import ProductSearchRequest
-from app.schemas.recommend.product_search_response import ProductSearchResponse
 from app.schemas.recommend.product_dto import ProductDto
 from app.config.openai_config import openai_config
 import logging
@@ -25,6 +23,7 @@ class RecommendService:
             응답 형식:
             키워드: [검색할 키워드]
             가격대: [최소금액-최대금액]
+
             
             예시:
             키워드: 요가 매트
