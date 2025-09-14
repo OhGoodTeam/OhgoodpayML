@@ -1,22 +1,33 @@
 from __future__ import annotations
 from enum import Enum
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, AliasChoices, ConfigDict, field_validator
 
-# FINE/MAIN 모두 허용
 class TxnIn(BaseModel):
-    id: str
-    ts: str
-    amount: float = Field(..., description="현금/카드 지출 기준 금액")
+    model_config = ConfigDict(populate_by_name=True)
+
+    # payment_id 또는 id 둘 다 허용, 어떤 타입이 오든 str로 캐스팅
+    id: str = Field(validation_alias=AliasChoices("id", "payment_id"))
+
+    @field_validator("id", mode="before")
+    @classmethod
+    def coerce_id_to_str(cls, v):
+        if v is None:
+            return v
+        # 숫자/소수/UUID 등 어떤 값이 와도 문자열로
+        return str(v)
+
+    ts: str = Field(validation_alias=AliasChoices("ts", "date"))
+    amount: float = Field(..., validation_alias=AliasChoices("amount", "price"))
     currency: str = "KRW"
     status: str = "paid"
-    merchant_name: Optional[str] = None
-    mcc: Optional[str] = None
+    merchant_name: Optional[str] = Field(default=None, validation_alias=AliasChoices("merchant_name", "request_name"))
+    mcc: Optional[str] = Field(default=None, validation_alias=AliasChoices("mcc", "merchant_code"))
     channel: Optional[str] = None
-    is_bnpl: Optional[bool] = None
-    installments: Optional[int] = None
+    is_bnpl: Optional[bool] = Field(default=None, validation_alias=AliasChoices("is_bnpl", "bnpl"))
+    installments: Optional[int] = Field(default=None, validation_alias=AliasChoices("installments", "installment"))
     memo: Optional[str] = None
-    category: Optional[str] = None  # FINE/MAIN 문자열 모두 허용
+    category: Optional[str] = None
 
 # 메인(상위) 카테고리 Enum 
 class MainCategory(str, Enum):
@@ -50,8 +61,11 @@ class MonthSummary(BaseModel):
     
 
 class AnalyzeRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
     transactions: List[TxnIn]
     use_llm_fallback: bool = False
+    customer_id: Optional[int] = Field(default=None, validation_alias=AliasChoices("customer_id","customerId"))
+    timezone: Optional[str] = None
 
 class AnalyzeResponse(BaseModel):
     months: List[MonthSummary]
