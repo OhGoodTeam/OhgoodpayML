@@ -61,28 +61,53 @@ class ChatService:
 
         # 3) 추천 단계: RecommendService + Presenter (LLM 불필요)
         elif request.flow in (Flow.RECOMMENDATION.value, Flow.RE_RECOMMENDATION.value):
-            keyword, price_range = await self.recommend_service.generate_keywords_async(
-                hobby=request.hobby,
-                mood=request.mood,
-                credit_limit=request.customer_info.credit_limit,
-                balance=request.balance
-            )
-            products = await self.recommend_service.search_products_async(keyword=keyword, price_range=price_range)
+            if request.flow == Flow.RECOMMENDATION.value:
+                # 초기 추천: 새로운 상품 검색 후 캐싱
+                keyword, price_range = await self.recommend_service.generate_keywords_async(
+                    hobby=request.hobby,
+                    mood=request.mood,
+                    credit_limit=request.customer_info.credit_limit,
+                    balance=request.balance
+                )
+                products = await self.recommend_service.search_products_async(keyword=keyword, price_range=price_range)
 
-            # re-recommendation이면 직전 추천과 중복 제거 (name 기준)
-            if request.flow == Flow.RE_RECOMMENDATION.value and getattr(request, "prev_products", None):
-                try:
-                    prev_names = [p.name if hasattr(p, "name") else p.get("name") for p in request.prev_products]
-                except Exception:
-                    prev_names = []
-                products = RecommendationPresenter.dedupe(prev_names, products)
+                # 상품 5개를 Redis에 캐싱 (session 키 전략)
+                if products:
+                    # 첫 번째 상품만 반환하고 나머지는 캐싱
+                    current_product = products[0] if products else None
+                    if len(products) > 1:
+                        # 나머지 상품들을 캐싱 (첫 번째 제외)
+                        self.redis_service.save_products(request.session_id, products[1:])
 
-            # 텍스트 구성
-            message = RecommendationPresenter.render_text(
-                hobby=request.hobby or "지금 취미",
-                mood=request.mood or "",
-                products=products
-            )
+                    products = [current_product] if current_product else []
+                else:
+                    products = []
+
+            elif request.flow == Flow.RE_RECOMMENDATION.value:
+                # 재추천: Redis에서 캐싱된 상품 하나씩 꺼내기
+                cached_product = self.redis_service.pop_product(request.session_id)
+
+                if cached_product:
+                    products = [cached_product]
+                else:
+                    # 캐싱된 상품이 없으면 임시 메시지
+                    message = "죄송해요, 더 이상 추천할 상품이 없어요. 새로운 취미나 기분을 알려주시면 다시 추천해드릴게요!"
+                    products = []
+
+            # 상품이 있을 때만 텍스트 구성
+            if products and request.flow == Flow.RECOMMENDATION.value:
+                message = RecommendationPresenter.render_text(
+                    hobby=request.hobby or "지금 취미",
+                    mood=request.mood or "",
+                    products=products
+                )
+            elif products and request.flow == Flow.RE_RECOMMENDATION.value:
+                message = RecommendationPresenter.render_text(
+                    hobby=request.hobby or "지금 취미",
+                    mood=request.mood or "",
+                    products=products
+                )
+            # message가 이미 설정된 경우 (상품 없음)는 그대로 유지
 
         else:
             # 방어: 허용되지 않은 단계 → mood_check로 유도
