@@ -14,12 +14,12 @@ def analyze_spending(payload: AnalyzeRequest = Body(...)):
     3) Spring DTO(SpendingAnalyzeResponseDTO) 모양(summary/monthly_data)으로 어댑트해서 반환
     """
     try:
-        # 1) 입력을 domain의 Txn dataclass로 투영(있으면), 없으면 dict 그대로
+        # domain의 Txn dataclass로 투영(있으면), 없으면 dict 그대로 입력
         tx_dicts: List[Dict] = [t.model_dump(by_alias=False) for t in payload.transactions]
         Txn = getattr(sp_analysis, "Txn", None)
         tx_input = [Txn(**d) for d in tx_dicts] if Txn else tx_dicts
 
-        # 2) 도메인 함수 유연 호출
+        # 도메인 함수 없으면 유연하게
         if hasattr(sp_analysis, "analyze"):
             raw = sp_analysis.analyze(tx_input, use_llm_fallback=payload.use_llm_fallback)
         elif hasattr(sp_analysis, "aggregate_3m"):
@@ -31,7 +31,7 @@ def analyze_spending(payload: AnalyzeRequest = Body(...)):
         else:
             raise RuntimeError("domain.spending.analysis에 analyze/aggregate_3m/analyze_spending/run 중 호출 가능한 함수가 없습니다.")
 
-        # 3) 응답 어댑터: Spring의 SpendingAnalyzeResponseDTO 형태로 변환
+        # 응답 어댑터: Spring의 SpendingAnalyzeResponseDTO 형태로 변환
         return _adapt_to_spring(raw)
 
     except Exception as e:

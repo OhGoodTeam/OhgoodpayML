@@ -28,7 +28,16 @@ class Txn:
     category: Optional[str] = None  # FINE/MAIN 둘 다 허용
 
 def _bucket_yyyymm(ts_iso: str) -> str:
-    dt = datetime.fromisoformat(ts_iso.replace("Z", "+00:00")).astimezone(KST)
+    s = ts_iso.strip()
+    if len(s) == 10 and s[4] == "-" and s[7] == "-":  # "YYYY-MM-DD"
+        dt = datetime.fromisoformat(s).replace(tzinfo=KST)
+        return f"{dt.year}-{dt.month:02d}"
+    s = s.replace("Z", "+00:00")
+    dt = datetime.fromisoformat(s)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=KST)
+    else:
+        dt = dt.astimezone(KST)
     return f"{dt.year}-{dt.month:02d}"
 
 def classify_category(tx: Txn, use_llm_fallback: bool = False) -> Tuple[str, float, str]:
@@ -105,18 +114,32 @@ def aggregate_3m(transactions: List[Txn]) -> Dict:
     summary = []
     for ym in months:
         total = round(by_month_total[ym], 2)
-        mains_sorted = sorted(by_month_main[ym].items(), key=lambda kv: -kv[1])
+        mains_sorted = sorted(by_month_main[ym].items(), key=lambda kv: (-kv[1], kv[0]))
         mains = {c: round(v, 2) for c, v in mains_sorted}
         shares = {c: (v / total if total else 0.0) for c, v in mains.items()}
 
         # 월별 Top3 결제 내역
         top_tx = sorted(month_txns[ym], key=lambda x: (-x["amount"], x["ts"]))[:3]
 
+        # ✅ 랭킹 계산 (경쟁 랭킹: 동률이면 같은 순위)
+        ranked = []
+        prev = None
+        seen = 0
+        rank_val = 0
+        for c, v in mains_sorted:
+            seen += 1
+            if prev is None or v != prev:
+                rank_val = seen
+                prev = v
+            ranked.append({
+                "category": c,
+                "amount": round(v, 2),
+                "share": round(shares[c], 4),
+                "rank": rank_val,            
+            })
+
         # 월별 Top3 카테고리
-        top_cats_month = [
-            {"category": c, "amount": round(v, 2), "share": round(shares[c], 4)}
-            for c, v in mains_sorted[:3]
-        ]
+        top_cats_month = ranked[:3]
 
         summary.append({
             "month": ym,
