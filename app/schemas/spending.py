@@ -58,4 +58,4 @@ class AnalyzeResponse(BaseModel):
     mom_growth: Optional[float] = None
     spikes: List[dict] = []
     top_transactions_3m: List[TopTransaction] = []
-    top_categories_3m: List[CategoryAmountMain]
+    top_categories_by_month: Dict[str, List[CategoryAmountMain]] = {}  
