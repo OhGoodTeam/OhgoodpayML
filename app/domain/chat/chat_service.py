@@ -22,10 +22,38 @@ class ChatService:
             client = openai_config.get_client() 
             params = openai_config.get_chat_completion_params( system_message=system_message, user_message=user_message ) 
             response = await client.chat.completions.create(**params) 
-            return response.choices[0].message.content 
-        except Exception as e: # LLM 호출 실패시 기본 메시지 반환 
-            logger.error(f"LLM 호출 실패: {e}") 
-            return "죄송해요, 잠시 문제가 생겼어요. 다시 시도해주세요." 
+            return response.choices[0].message.content
+        except Exception as e: # LLM 호출 실패시 기본 메시지 반환
+            logger.error(f"LLM 호출 실패: {e}")
+            return "죄송해요, 잠시 문제가 생겼어요. 다시 시도해주세요."
+
+    async def _validate_hobby(self, user_input: str) -> tuple[bool, str]:
+        """취미 입력 검증 및 정제"""
+        try:
+            client = openai_config.get_client()
+            system_message = ChatPrompter.get_hobby_validation_prompt()
+
+            params = openai_config.get_chat_completion_params(
+                system_message=system_message,
+                user_message=user_input
+            )
+            response = await client.chat.completions.create(**params)
+            llm_response = response.choices[0].message.content.strip()
+
+            if llm_response.startswith("VALID:"):
+                # "VALID:독서,요리" 형태에서 취미 추출
+                hobbies = llm_response[6:].strip()  # "VALID:" 제거
+                return True, hobbies
+            else:
+                # INVALID인 경우
+                return False, ""
+
+        except Exception as e:
+            logger.error(f"취미 검증 LLM 호출 실패: {e}")
+            # LLM 실패시 기본적인 필터링만 적용
+            if len(user_input.strip()) < 2 or any(char in user_input for char in ["ㅋ", "ㅎ", "!"*3, "?"*3]):
+                return False, ""
+            return True, user_input.strip() 
             
     async def _generate_updated_summary(self, session_id: str, current_summary: str, user_message: str, assistant_message: str) -> str: 
         """기존 요약본을 새로운 대화 내용과 합쳐서 갱신""" 
@@ -117,12 +145,25 @@ class ChatService:
             user_message = ChatPayloadBuilder.build_user_message(request)
             message = await self._generate_llm_response(system_message, user_message)
 
-        # 4) choose 단계에서의 취미 업데이트 정책
+        # 4) choose 단계에서의 취미 업데이트 정책 + 검증
         if request.flow == Flow.CHOOSE.value:
             customer_id = str(request.customer_info.customer_id)
-            new_hobby = request.input_message or ""
-            if new_hobby:
-                self.redis_service.save_user_hobby(customer_id, new_hobby)
+            user_input = request.input_message or ""
+
+            if user_input:
+                # 취미 검증
+                is_valid, validated_hobby = await self._validate_hobby(user_input)
+
+                if is_valid:
+                    # 유효한 취미인 경우 저장
+                    new_hobby = validated_hobby
+                    self.redis_service.save_user_hobby(customer_id, new_hobby)
+                else:
+                    # 유효하지 않은 취미인 경우 재입력 요청
+                    message = "음.. 그 입력은 취미로 인식하기 어려워 😅 실제 취미나 관심사를 알려줄래? (예: 독서, 게임, 요리, 운동 등)"
+                    new_hobby = ""  # 취미 업데이트 안함
+            else:
+                new_hobby = ""
 
         # 5) 요약 갱신 (추천 단계도 포함)
         try:
