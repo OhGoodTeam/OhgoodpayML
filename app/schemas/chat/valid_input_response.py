@@ -14,7 +14,8 @@ class ValidInputResponse(BaseModel):
 
     model_config = ConfigDict(
         # camelCase alias 허용
-        populate_by_name=True
+        populate_by_name=True,
+        by_alias=True  #is_valid 제대로 안 잡히는 문제를 해결하기 위함.
     )
 
     @classmethod
