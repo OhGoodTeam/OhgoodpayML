@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 """
 FAST API - LLM VALID 요청 DTO
@@ -12,9 +12,10 @@ class ValidInputResponse(BaseModel):
     message:  str = Field(..., alias="message", description="LLM이 주는 메세지")
     flow: str = Field(..., description="Spring Boot에서 관리하는 채팅 플로우 상태")
 
-    class Config:
+    model_config = ConfigDict(
         # camelCase alias 허용
-        allow_population_by_field_name = True
+        populate_by_name=True
+    )
 
     @classmethod
     def of(
