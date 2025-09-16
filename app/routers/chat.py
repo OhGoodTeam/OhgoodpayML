@@ -39,3 +39,4 @@ async def generate_chat(
         logger = logging.getLogger(__name__)
         logger.error(f"Chat API 에러: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"서버 내부 오류: {str(e)}")
+

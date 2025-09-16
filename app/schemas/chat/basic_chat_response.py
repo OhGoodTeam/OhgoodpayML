@@ -11,9 +11,7 @@ class BasicChatResponse(BaseModel):
 
     session_id: str = Field(..., alias="sessionId", description="채팅 redis 저장을 위한 세션 아이디")
     message: str = Field(..., description="llm에서 응답한 chat message")
-
     new_hobby: str = Field(..., alias="newHobby", description="새로 바뀐 취미")
-    
     products: Optional[List[ProductDto]] = Field(default=None, description="추천 상품 목록")
     
     @classmethod
