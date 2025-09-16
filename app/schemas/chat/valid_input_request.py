@@ -6,7 +6,7 @@ FAST API - LLM VALID 요청 DTO
 class ValidInputRequest(BaseModel):
 
     customer_id: int = Field(..., alias="customerId", description="고객 아이디")
-    session_id: str = Field(..., alias="sessionId", description="채팅 redis 저장을 위한 세션 아이디")
+    session_id: str = Field(..., alias="sessionId", description="채팅 세션 아이디")
     input_message: str = Field(..., alias="inputMessage", description="고객이 입력한 메세지")
     flow: str = Field(..., description="Spring Boot에서 관리하는 채팅 플로우 상태")
 

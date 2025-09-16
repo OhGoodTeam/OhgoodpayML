@@ -6,7 +6,7 @@ FAST API - LLM VALID 요청 DTO
 class ValidInputResponse(BaseModel):
 
     customer_id: int = Field(..., alias="customerId", description="고객 아이디")
-    session_id: str = Field(..., alias="sessionId", description="채팅 redis 저장을 위한 세션 아이디")
+    session_id: str = Field(..., alias="sessionId", description="채팅 세션 아이디")
     input_message: str = Field(..., alias="inputMessage", description="고객이 입력한 메세지")
     is_valid: bool = Field(..., alias="isValid", description="입력이 유효한지 검증")
     message:  str = Field(..., alias="message", description="LLM이 주는 메세지")
@@ -14,7 +14,8 @@ class ValidInputResponse(BaseModel):
 
     model_config = ConfigDict(
         # camelCase alias 허용
-        populate_by_name=True
+        populate_by_name=True,
+        by_alias=True  #is_valid 제대로 안 잡히는 문제를 해결하기 위함.
     )
 
     @classmethod
