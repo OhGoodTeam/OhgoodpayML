@@ -9,13 +9,13 @@ FAST API - LLM 요청 기본 DTO
 
 class BasicChatRequest(BaseModel):
     
-    session_id: str = Field(..., alias="sessionId", description="채팅 redis 저장을 위한 세션 아이디")
+    session_id: str = Field(..., alias="sessionId", description="채팅 세션 아이디")
     customer_info: CustomerCacheDto = Field(..., alias="customerInfo", description="채팅 생성 요청을 위한 고객 기본 정보")
     mood: str = Field(..., description="채팅 생성 요청을 위한 고객 현재 기분")
     hobby: str = Field(..., description="채팅 생성 요청을 위한 고객 취미")
     balance: int = Field(..., description="채팅 생성 요청을 위한 고객 현재 잔액")
     input_message: str = Field(..., alias="inputMessage", description="사용자가 입력한 메세지")
-    summary: str = Field(..., description="redis 저장을 위한 대화 요약본")
+    summary: str = Field(..., description="대화 요약본")
     flow: str = Field(..., description="Spring Boot에서 관리하는 채팅 플로우 상태")
     
     class Config:
