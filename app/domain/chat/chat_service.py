@@ -122,5 +122,6 @@ class ChatService:
             message=message,
             session_id=request.session_id,
             new_hobby=new_hobby,
-            products=products
+            products=products,
+            flow=request.flow
         )
