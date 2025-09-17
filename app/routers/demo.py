@@ -3,6 +3,10 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from pathlib import Path
 import json
+import os
+
+API_PREFIX = os.getenv("API_AI_PREFIX","")
+
 
 router = APIRouter()
 EXAMPLES_DIR = Path(__file__).resolve().parents[1] / "examples"  # app/examples
@@ -43,3 +47,27 @@ def demo_files():
         {"name": p.name, "size": p.stat().st_size}
         for p in EXAMPLES_DIR.glob("*")
     ]
+# sse 테스트 페이지
+@router.get("/sse-test", response_class=HTMLResponse)
+def sse_test():
+    return f"""<!doctype html><meta charset="utf-8">
+<h1>SSE Stream Test</h1>
+<button id="go">Start intro stream</button>
+<pre id="out"></pre>
+<script>
+const btn = document.getElementById('go');
+const out = document.getElementById('out');
+btn.onclick = async () => {{
+  out.textContent = "";
+  const resp = await fetch("{API_PREFIX}/v1/narratives/intro/stream", {{
+    headers: {{"X-Internal-Token":"dev-internal-token-123"}}
+  }});
+  const reader = resp.body.getReader();
+  const dec = new TextDecoder();
+  while (true) {{
+    const {{value, done}} = await reader.read();
+    if (done) break;
+    out.textContent += dec.decode(value);
+  }}
+}};
+</script>"""

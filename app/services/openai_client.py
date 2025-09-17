@@ -7,7 +7,6 @@ from openai import OpenAI
 
 Json = Dict[str, Any]
 
-# --- 초기화 ---
 load_dotenv()
 API_KEY = os.getenv("OPENAI_API_KEY")
 if not API_KEY:

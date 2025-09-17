@@ -49,25 +49,24 @@ def _meta_with_defaults(meta: Dict[str, Any] | None, style_version: str, lang: s
 def generate_advice(snap: AdviceIn, prompt: DashboardAdvicePrompt | None = None) -> AdviceOut:
     p = prompt or DashboardAdvicePrompt()
 
-    # 1) 프롬프트 페이로드 생성
+    # 프롬프트 페이로드 생성
     user_payload = p.user_payload({
         "identity": snap.identity.model_dump(),
         "spending": snap.spending.model_dump(),
     })
 
-    # 추적/캐시용 입력 해시(PII 로그 금지: 값은 meta로만 전달)
+    # 추적/캐시용 입력 해시
     input_hash = hashlib.sha1(json.dumps(user_payload, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest()[:12]
 
-    # 2) LLM 호출 (JSON 보장)
+    # LLM 호출 (JSON 보장)
     # try:
     data = call_llm_json(system=p.system, user_obj=user_payload)
     # except LLMError as e:
-    #     # 폴백: LLM 실패 시 기본 3개 제공 (운영정책에 맞게 메시지 다듬으세요)
     #     adv = _normalize_advices([], count=3)
     #     meta = _meta_with_defaults({"error": "llm_error"}, p.style_version, p.language, input_hash)
     #     return AdviceOut(advices=adv, meta=meta)
 
-    # 3) 정규화 & 메타 구성
+    # 정규화 & 메타 구성
     adv = _normalize_advices(data.get("advices"), count=3)
     meta = _meta_with_defaults(data.get("meta"), p.style_version, p.language, input_hash)
 

@@ -50,6 +50,8 @@ class CategoryAmountMain(BaseModel):
     category: MainCategory
     amount: float
     share: float
+    rank: Optional[int] = None
+
 
 class MonthSummary(BaseModel):
     month: str
@@ -58,7 +60,7 @@ class MonthSummary(BaseModel):
     category_share: Dict[MainCategory, float]
     top_transactions: List[TopTransaction] = []
     top_categories: List[CategoryAmountMain]
-    
+    top_categories: List[CategoryAmountMain]  
 
 class AnalyzeRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
@@ -72,4 +74,5 @@ class AnalyzeResponse(BaseModel):
     mom_growth: Optional[float] = None
     spikes: List[dict] = []
     top_transactions_3m: List[TopTransaction] = []
-    top_categories_by_month: Dict[str, List[CategoryAmountMain]] = {}  
+    top_categories_by_month: Dict[str, List[CategoryAmountMain]] = {}
+      
