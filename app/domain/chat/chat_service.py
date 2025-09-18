@@ -107,8 +107,9 @@ class ChatService:
 
 
         # 5) 요약 갱신 (추천 단계도 포함)
+        summary = request.summary
         try:
-            await self._generate_updated_summary(
+            summary = await self._generate_updated_summary(
                 session_id=request.session_id,
                 current_summary=request.summary,
                 user_message=request.input_message,
@@ -123,5 +124,6 @@ class ChatService:
             session_id=request.session_id,
             new_hobby=new_hobby,
             products=products,
+            summary=summary,
             flow=request.flow
         )
