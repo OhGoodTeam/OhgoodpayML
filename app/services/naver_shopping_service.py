@@ -38,9 +38,9 @@ class NaverShoppingService:
                         title = self._remove_html_tags(item.get("title", ""))
                         category = item.get("category1", "") + " > " + item.get("category2", "")
                         
-                        # 이미지 URL을 프록시 URL로 변환
+                        # 네이버 원본 이미지 URL 그대로 반환 (Spring Boot에서 프록시 처리)
                         original_image = item.get("image", "")
-                        proxy_image = f"/ml/image-proxy?url={original_image}" if original_image else ""
+                        proxy_image = original_image if original_image else ""
                         
                         product = ProductDto(
                             rank=i,
