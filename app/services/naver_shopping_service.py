@@ -9,11 +9,11 @@ logger = logging.getLogger(__name__)
 class NaverShoppingService:
     """네이버 쇼핑 API 서비스"""
     
-    async def search_products(self, query: str, display: int = 10) -> List[ProductDto]:
+    async def search_products(self, query: str, display: int) -> List[ProductDto]:
         """네이버 쇼핑 API로 상품 검색"""
         try:
-            # 최대 10개로 제한
-            display = min(display, 10)
+            # 최대 50개로 제한, 네이버 쇼핑 api의 경우, 한 번에 100개까지만 가능하다.
+            display = min(display, 50)
 
             headers = naver_config.get_headers()
             params = naver_config.get_search_params(query, display)
@@ -67,7 +67,7 @@ class NaverShoppingService:
                         logger.debug(f"실패한 항목 데이터: {item}")
                         continue
 
-                logger.info(f"네이버 쇼핑 검색 완료: query={query}, API응답={len(items)}개, 파싱성공={len(products)}개")
+                # logger.info(f"네이버 쇼핑 검색 완료: query={query}, API응답={len(items)}개, 파싱성공={len(products)}개")
                 return products
                 
                 # TODO : 상품 요청 실패시, flow를 어떻게 처리할지는 고민이 필요하다.
