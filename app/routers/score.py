@@ -2,8 +2,6 @@ from fastapi import APIRouter
 from app.domain.scoring import OGoodScoreMin, InputFeatures
 from app.schemas.common import APIEnvelope
 
-
-
 router = APIRouter(prefix="/score", tags=["ohgoodscore"])
 
 @router.post("", summary="Compute OhGood score")

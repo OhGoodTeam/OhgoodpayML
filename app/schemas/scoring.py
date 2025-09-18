@@ -2,7 +2,7 @@ from enum import Enum
 from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import List, Optional
 
-# profile 문자열
+# profile 
 class ScoreProfile(str, Enum):
     baseline = "baseline"
     conservative = "conservative"
@@ -10,15 +10,20 @@ class ScoreProfile(str, Enum):
 
 # 네 dataclass와 1:1 매핑
 class InputFeaturesIn(BaseModel):
-    extension_this_month: bool = False
-    auto_extension_this_month: bool = False
-    auto_extension_cnt_12m: int = 0
-    grade_point: int = Field(0, ge=0, le=150)
-    is_blocked: bool = False
-    payment_cnt_12m: int = Field(0, ge=0)
-    payment_amount_12m: float = Field(0.0, ge=0)
-    current_cycle_spend: float = Field(0.0, ge=0)
+    # camelCase -> snake_case 매핑 (alias)
+    extension_this_month: bool = Field(False, alias="extensionThisMonth")
+    auto_extension_this_month: bool = Field(False, alias="autoExtensionThisMonth")
+    auto_extension_cnt_12m: int = Field(0, ge=0, alias="autoExtensionCnt12m")
+    grade_point: int = Field(0, ge=0, le=200, alias="gradePoint")  
+    is_blocked: bool = Field(False, alias="blocked")
+    payment_cnt_12m: int = Field(0, ge=0, alias="paymentCnt12m")
+    payment_amount_12m: float = Field(0.0, ge=0, alias="paymentAmount12m")
+    current_cycle_spend: float = Field(0.0, ge=0, alias="currentCycleSpend")
 
+    model_config = ConfigDict(
+        populate_by_name=True,  # alias 채우기 허용
+        extra="forbid",         # 오타/미매핑 키가 오면 422로 즉시 알림
+    )
 class ReasonOut(BaseModel):
     code: str
     label: str
@@ -38,7 +43,6 @@ class ScoreResultOut(BaseModel):
     top_positive: Optional[ReasonOut]
 
 class SayMyNameIn(InputFeaturesIn):  # ← 기존 점수 입력 스키마 상속
-    # 스프링이 같이 보내주는 컨텍스트(선택)
     customer_id: Optional[str] = Field(default=None, alias="customerId")
     username: Optional[str] = None
     grade: Optional[str] = None
@@ -47,7 +51,7 @@ class SayMyNameIn(InputFeaturesIn):  # ← 기존 점수 입력 스키마 상속
     # camelCase/snake_case 모두 허용
     model_config = ConfigDict(populate_by_name=True, extra="allow")
 
-    # 스프링이 숫자로 보낼 수도 있어서 문자열로 정규화
+    # 스프링이 숫자로 보낼 수도 있어 문자열로 정규화
     @field_validator("customer_id", mode="before")
     def _id_to_str(cls, v):
         return None if v is None else str(v)
@@ -57,3 +61,7 @@ class SayMyNameOut(BaseModel):
     sessionId: str
     ttlSeconds: int
     score: int
+    userId: str
+    gradeName: str
+    gradeLimit: int
+    pointPercent: float

@@ -165,18 +165,18 @@ class OGoodScoreMin:
         )
 
 # --- 사용 예 ---
-if __name__ == "__main__":
-    f = InputFeatures(
-        extension_this_month=True,
-        auto_extension_this_month=False,
-        auto_extension_cnt_12m=3,
-        grade_point=10,
-        is_blocked=False,
-        payment_cnt_12m=16,
-        payment_amount_12m=6_800_000,
-        current_cycle_spend=180_000,
-    )
-    print( OGoodScoreMin.score(f, profile="growth").to_json(pretty=True) )
-    print( OGoodScoreMin.score(f, profile="conservative").to_json(pretty=True) )
-    print( OGoodScoreMin.score(f, profile="baseline").to_json(pretty=True) )
+# if __name__ == "__main__":
+#     f = InputFeatures(
+#         extension_this_month=True,
+#         auto_extension_this_month=False,
+#         auto_extension_cnt_12m=3,
+#         grade_point=10,
+#         is_blocked=False,
+#         payment_cnt_12m=16,
+#         payment_amount_12m=6_800_000,
+#         current_cycle_spend=180_000,
+#     )
+#     print( OGoodScoreMin.score(f, profile="growth").to_json(pretty=True) )
+#     print( OGoodScoreMin.score(f, profile="conservative").to_json(pretty=True) )
+#     print( OGoodScoreMin.score(f, profile="baseline").to_json(pretty=True) )
 
