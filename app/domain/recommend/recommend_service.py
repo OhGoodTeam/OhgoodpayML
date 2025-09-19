@@ -81,27 +81,30 @@ class RecommendService:
         내부 서비스용: 상품 검색 - 네이버 쇼핑 API 연동
         """
         try:
-            # 네이버 쇼핑 API로 상품 검색 (최대 5개)
-            products = await self.naver_shopping_service.search_products(keyword, display=5)
-            
-            # 가격대 필터링 (선택적)
+            # 가격대 필터링이 있을 때는 더 많은 상품을 가져와서 필터링 후 10개 확보
+            display_count = 50 if price_range and "-" in price_range else 10
+
+            # 네이버 쇼핑 API로 상품 검색
+            products = await self.naver_shopping_service.search_products(keyword, display=display_count)
+
+            # 가격대 필터링 (선택적) - 해당 가격대의 상품이 있는 경우에만 필터링을 진행한다.
             if price_range and "-" in price_range:
                 try:
                     min_price, max_price = map(int, price_range.split("-"))
                     filtered_products = [
-                        p for p in products 
+                        p for p in products
                         if min_price <= p.price <= max_price
                     ]
-                    # 필터링 결과가 있으면 사용, 없으면 원본 사용
-                    if filtered_products:
-                        products = filtered_products[:3]  # 최대 3개만
+                    # 필터링 후 최대 10개만 반환
+                    products = filtered_products[:10]
+                    logger.info(f"필터링 결과: {len(filtered_products)}개 중 {len(products)}개 반환")
                 except ValueError:
                     logger.warning(f"가격대 파싱 실패: {price_range}")
-            
-            # 최대 3개로 제한
-            return products[:3]
+                    products = products[:10]  # 필터링 실패시 원본에서 10개
+
+            return products
             
         except Exception as e:
             logger.error(f"상품 검색 실패: keyword={keyword}, error={e}")
-            # 실패시 네이버 서비스의 fallback 사용
-            return await self.naver_shopping_service.search_products(keyword, display=3)
+            # 빈 리스트 반환하거나 예외를 다시 raise
+            return []

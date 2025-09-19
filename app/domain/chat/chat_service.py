@@ -58,6 +58,11 @@ class ChatService:
             user_message = ChatPayloadBuilder.build_user_message(request)
             message = await self._generate_llm_response(system_message, user_message)
 
+            # HOBBY_CHECK 플로우일 때 새로운 취미 설정
+            if request.flow == Flow.CHOOSE.value:
+                new_hobby = request.hobby
+                logger.warning(f"new_hobby 체크하기!!! : {new_hobby}")
+
         # 3) 추천 단계: RecommendService + Presenter (LLM 불필요)
         elif request.flow in (Flow.RECOMMENDATION.value, Flow.RE_RECOMMENDATION.value):
             if request.flow == Flow.RECOMMENDATION.value:
@@ -107,8 +112,9 @@ class ChatService:
 
 
         # 5) 요약 갱신 (추천 단계도 포함)
+        summary = request.summary
         try:
-            await self._generate_updated_summary(
+            summary = await self._generate_updated_summary(
                 session_id=request.session_id,
                 current_summary=request.summary,
                 user_message=request.input_message,
@@ -123,5 +129,6 @@ class ChatService:
             session_id=request.session_id,
             new_hobby=new_hobby,
             products=products,
+            summary=summary,
             flow=request.flow
         )
