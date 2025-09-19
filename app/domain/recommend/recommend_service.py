@@ -1,5 +1,6 @@
 from app.schemas.recommend.product_dto import ProductDto
 from app.config.openai_config import openai_config
+from app.services.naver_shopping_service import NaverShoppingService
 import logging
 
 logger = logging.getLogger(__name__)
@@ -11,6 +12,8 @@ Recommend domain module
 llm 연동으로 추천 상품들을 생성하는 역할을 담당
 """
 class RecommendService:
+    def __init__(self):
+        self.naver_shopping_service = NaverShoppingService()
     async def _generate_llm_keywords(self, hobby: str, mood: str, credit_limit: int, balance: int) -> tuple[str, str]:
         """LLM을 사용하여 키워드와 가격대 생성"""
         # TODO : 차후 모든 프롬프터는 한 클래스로 합칠 예정
@@ -75,33 +78,33 @@ class RecommendService:
 
     async def search_products_async(self, keyword: str, price_range: str) -> list[ProductDto]:
         """
-        내부 서비스용: 상품 검색
+        내부 서비스용: 상품 검색 - 네이버 쇼핑 API 연동
         """
-        # TODO: 네이버 쇼핑 API 연동
-        mock_products = [
-            ProductDto(
-                rank=1,
-                name=f"{keyword} 관련 상품 1",
-                price=15000,
-                image="http://example.com/image1.jpg",
-                url="http://example.com/product1",
-                category="추천상품"
-            ),
-            ProductDto(
-                rank=2,
-                name=f"{keyword} 관련 상품 2",
-                price=30000,
-                image="http://example.com/image2.jpg",
-                url="http://example.com/product2",
-                category="추천상품"
-            ),
-            ProductDto(
-                rank=3,
-                name=f"{keyword} 관련 상품 3",
-                price=45000,
-                image="http://example.com/image3.jpg",
-                url="http://example.com/product3",
-                category="추천상품"
-            )
-        ]
-        return mock_products
+        try:
+            # 가격대 필터링이 있을 때는 더 많은 상품을 가져와서 필터링 후 10개 확보
+            display_count = 50 if price_range and "-" in price_range else 10
+
+            # 네이버 쇼핑 API로 상품 검색
+            products = await self.naver_shopping_service.search_products(keyword, display=display_count)
+
+            # 가격대 필터링 (선택적) - 해당 가격대의 상품이 있는 경우에만 필터링을 진행한다.
+            if price_range and "-" in price_range:
+                try:
+                    min_price, max_price = map(int, price_range.split("-"))
+                    filtered_products = [
+                        p for p in products
+                        if min_price <= p.price <= max_price
+                    ]
+                    # 필터링 후 최대 10개만 반환
+                    products = filtered_products[:10]
+                    logger.info(f"필터링 결과: {len(filtered_products)}개 중 {len(products)}개 반환")
+                except ValueError:
+                    logger.warning(f"가격대 파싱 실패: {price_range}")
+                    products = products[:10]  # 필터링 실패시 원본에서 10개
+
+            return products
+            
+        except Exception as e:
+            logger.error(f"상품 검색 실패: keyword={keyword}, error={e}")
+            # 빈 리스트 반환하거나 예외를 다시 raise
+            return []
