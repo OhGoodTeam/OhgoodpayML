@@ -64,7 +64,7 @@ RULES: List[Tuple[re.Pattern, str, float]] = [
     (re.compile(r"(스타벅스|starbucks)", re.I), "CAFES", 0.9),
     (re.compile(r"(배달의민족|요기요|coupang\s*eats|baemin|yogiyo)", re.I), "FOOD_DELIVERY", 0.9),
     (re.compile(r"(gs25|cu\s?편의점|세븐일레븐|7-?eleven|이마트24)", re.I), "CONVENIENCE", 0.8),
-    (re.compile(r"(이마트|홈플러스|롯데마트|costco)", re.I), "GROCERIES", 0.8),
+    (re.compile(r"(이마트|홈플러스|롯데마트|costco|코스트코)", re.I), "GROCERIES", 0.8),
     (re.compile(r"(kakao\s*t|카카오\s*T|택시|uber|grab|korail|ktx|srt|지하철|버스)", re.I), "TRANSPORT", 0.7),
     (re.compile(r"(넷플릭스|netflix|youtube\s*premium|tving|wavve|watcha|멜론)", re.I), "SUBSCRIPTION", 0.9),
     (re.compile(r"(sk텔레콤|kt\b|lg유플러스|통신요금)", re.I), "COMMUNICATION", 0.8),
@@ -82,5 +82,5 @@ RULES: List[Tuple[re.Pattern, str, float]] = [
     (re.compile(r"\b편의점\b", re.I), "CONVENIENCE", 0.7),
     (re.compile(r"(cgv|롯데시네마|메가박스|megabox|입장권)", re.I), "ENTERTAINMENT", 0.9),
     (re.compile(r"(교보문고|영풍문고|yes24|알라딘)", re.I), "EDUCATION", 0.8),
-    (re.compile(r"(네이버페이\s*충전)", re.I), "TRANSFER", 0.9),
+    (re.compile(r"(네이버페이\s*충전|카카오페이\s*충전|페이코\s*충전)", re.I), "TRANSFER", 0.9),
 ]
