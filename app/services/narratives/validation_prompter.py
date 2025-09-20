@@ -168,7 +168,7 @@ class ValidationPrompter:
             "mood_check": ValidationPrompter.get_mood_check_prompt,
             "hobby_check": ValidationPrompter.get_hobby_check_prompt,
             "choose": ValidationPrompter.get_choose_prompt,
-            "re_recommendation": ValidationPrompter.get_re_recommendation_prompt(),
+            "re-recommendation": ValidationPrompter.get_re_recommendation_prompt,
         }
 
         prompt_method = flow_prompt_mapping.get(flow)

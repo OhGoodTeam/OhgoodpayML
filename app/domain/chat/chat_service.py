@@ -60,7 +60,7 @@ class ChatService:
 
             # HOBBY_CHECK 플로우일 때 새로운 취미 설정
             if request.flow == Flow.CHOOSE.value:
-                new_hobby = request.hobby
+                new_hobby = request.message
                 logger.warning(f"new_hobby 체크하기!!! : {new_hobby}")
 
         # 3) 추천 단계: RecommendService + Presenter (LLM 불필요)
