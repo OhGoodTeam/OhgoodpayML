@@ -113,6 +113,41 @@ class ValidationPrompter:
         """
 
     @staticmethod
+    def get_re_recommendation_prompt() -> str:
+        base_rule = ValidationPrompter.get_base_validation_rule()
+        return f"""
+            {base_rule}
+    
+            목표: 사용자가 **추천된 상품이 마음에 들지 않아** 다른 상품을 다시 보고 싶어 하는지 판별.
+    
+            ✅ VALID 기준 (하나라도 만족하면 VALID)
+            1) **재추천 요청/거절 표현**:
+               - "다른 거", "다른 상품", "다른 걸로", "다시 추천", "재추천", "새로 추천"
+               - "마음에 안 들어", "별로야", "싫어", "취소", "패스", "스킵", "노우"
+               - "더 보여줘", "계속", "다른 옵션", "다른 것도"
+    
+            2) **구체적 불만 피드백** (단, 번호 지칭은 불가):
+               - "이건 별로", "디자인 마음에 안 들어", "색이 안 맞아", "무거워", "너무 크다"
+               - 특정 속성 언급은 허용 (색, 크기, 무게, 느낌 등)
+    
+            ❌ INVALID 예시:
+            - 맥락 없는 잡담/인사: "안녕", "ㅋㅋ", "ㅎㅇ", "테스트"
+            - 추천과 무관한 질문: "날씨 어때?", "메뉴 뭐가 맛있어?"
+            - 불명확 단어: "응", "몰라", "나중에"
+    
+            판단 팁:
+            - "싫어/별로/마음에 안 들어"만 있어도 재추천 의도로 인정 → VALID.
+            - 번호 지정("1번", "두 번째")은 현재 불가하므로 INVALID 처리.
+            - 가격대 조건("10만 원 이하") 같은 필터링 요구도 INVALID 처리.
+    
+            엄격 출력 형식:
+            - VALID: <한 줄 코멘트>
+              예) "다른 상품으로 다시 추천할게." / "별로라니 다른 거 보여줄게."
+            - INVALID: 재추천 의도를 알아듣지 못했어ㅠㅠ "다른 거/마음에 안 들어" 같이 말해줘!
+              (위 INVALID 문구를 **띄어쓰기까지** 완전히 동일하게 출력. 다른 문구 금지)
+            """
+
+    @staticmethod
     def get_default_prompt() -> str:
         base_rule = ValidationPrompter.get_base_validation_rule()
         return f"""
@@ -133,6 +168,7 @@ class ValidationPrompter:
             "mood_check": ValidationPrompter.get_mood_check_prompt,
             "hobby_check": ValidationPrompter.get_hobby_check_prompt,
             "choose": ValidationPrompter.get_choose_prompt,
+            "re_recommendation": ValidationPrompter.get_re_recommendation_prompt(),
         }
 
         prompt_method = flow_prompt_mapping.get(flow)
