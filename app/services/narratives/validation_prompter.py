@@ -85,13 +85,38 @@ class ValidationPrompter:
           (위 INVALID 문구를 **띄어쓰기까지** 완전히 동일하게 출력. 다른 문구 금지)
         """
 
+    # 선택에 관련된 프롬프터이다.
     @staticmethod
     def get_choose_prompt() -> str:
         base_rule = ValidationPrompter.get_base_validation_rule()
         return f"""
         {base_rule}
     
-        목표: 사용자의 선택을 **"상품 추천"** 또는 **"대시보드"** 둘 중 하나로 분류한다.
+        목표: 사용자의 선택을 **"상품 추천"**으로 분류한다.
+        
+        VALID 기준:
+        - "상품 추천"을 의미하는 경우:
+          - 확답/부정 중 추천 관련: "추천해줘", "상품 볼래", "네", "예", "ㅇㅇ", "응", "오케이", "좋아요"
+          - 선택 지시 중 추천 쪽: "이걸로", "왼쪽", "첫 번째", "B로 할게" 등 (추천 항목 선택 맥락)
+          - 명시적 결정: "주문 진행", "확정", "선택 완료" → 기본적으로 추천에 매핑
+    
+        INVALID 예시:
+        - "글쎄", "모르겠어", "흠", "고민 중", "나중에"
+    
+        엄격 출력 형식:
+        - VALID: 반드시 **"상품 추천"**을 한 줄로 출력
+        - INVALID: 선택을 알아듣지 못했어ㅠㅠ 둘 중 하나를 선택해줘!
+          (위 INVALID 문구를 **띄어쓰기까지** 완전히 동일하게 출력. 다른 문구 금지)
+        """
+
+    # 추천 플로우에 관한 것이다. 여기서 "다른거" 및 다른 상품 추천에 대한 입력을 받는다.
+    @staticmethod
+    def get_recommendation_prompt() -> str:
+        base_rule = ValidationPrompter.get_base_validation_rule()
+        return f"""
+        {base_rule}
+    
+        목표: 사용자의 선택을 **"상품 추천"** 또는 **"다른 상품 추천"**으로 분류한다.
         
         VALID 기준:
         - "상품 추천"을 의미하는 경우:
@@ -99,19 +124,24 @@ class ValidationPrompter:
           - 선택 지시 중 추천 쪽: "이걸로", "왼쪽", "첫 번째", "B로 할게" 등 (추천 항목 선택 맥락)
           - 명시적 결정: "주문 진행", "확정", "선택 완료" → 기본적으로 추천에 매핑
         
-        - "대시보드"를 의미하는 경우:
-          - 확답/부정 중 대시보드 관련: "대시보드 보여줘", "현황 볼래", "내 정보", "분석 보고서"
-          - 선택 지시 중 대시보드 맥락: "오른쪽", "두 번째" 등 (대시보드 화면 선택 맥락)
+        - "다른 상품 추천"을 의미하는 경우:
+          - 다른 옵션 요청: "다른거", "다른 것", "다른걸로", "다른 상품"
+          - 재추천 요청: "다시 추천해줘", "다른 걸로 추천", "바꿔줘", "교체해줘"
+          - 불만족 표현 후 대안 요청: "마음에 안 들어", "다른 옵션 있어?", "이거 말고"
+          - 변경 요청: "바꾸고 싶어", "다른 거 볼래", "패스", "스킵"
     
         INVALID 예시:
         - "글쎄", "모르겠어", "흠", "고민 중", "나중에"
     
         엄격 출력 형식:
-        - VALID: 반드시 **"상품 추천"** 또는 **"대시보드"** 중 하나를 한 줄로 출력
+        - VALID (기존 추천): 반드시 **"상품 추천"**을 한 줄로 출력
+        - VALID (다른 추천): 반드시 **"다른 상품 추천"**을 한 줄로 출력
         - INVALID: 선택을 알아듣지 못했어ㅠㅠ 둘 중 하나를 선택해줘!
           (위 INVALID 문구를 **띄어쓰기까지** 완전히 동일하게 출력. 다른 문구 금지)
         """
 
+    # 다른 상품 추천 플로우, 유효성 검사
+    # 현재는 일단 수량도 받게끔 해뒀는데, 반영은 아직 안 되어 있다.
     @staticmethod
     def get_re_recommendation_prompt() -> str:
         base_rule = ValidationPrompter.get_base_validation_rule()
@@ -126,7 +156,12 @@ class ValidationPrompter:
                - "마음에 안 들어", "별로야", "싫어", "취소", "패스", "스킵", "노우"
                - "더 보여줘", "계속", "다른 옵션", "다른 것도"
     
-            2) **구체적 불만 피드백** (단, 번호 지칭은 불가):
+            2) **개수 지정 재추천**:
+               - "5개", "8개", "10개", "몇 개 더", "더 많이", "여러 개"
+               - "3개 더 보여줘", "10개 추천해줘", "5개짜리로"
+               - 숫자 + (개/가지/종류): "5개", "3가지", "여러 종류"
+    
+            3) **구체적 불만 피드백** (단, 번호 지칭은 불가):
                - "이건 별로", "디자인 마음에 안 들어", "색이 안 맞아", "무거워", "너무 크다"
                - 특정 속성 언급은 허용 (색, 크기, 무게, 느낌 등)
     
@@ -134,15 +169,18 @@ class ValidationPrompter:
             - 맥락 없는 잡담/인사: "안녕", "ㅋㅋ", "ㅎㅇ", "테스트"
             - 추천과 무관한 질문: "날씨 어때?", "메뉴 뭐가 맛있어?"
             - 불명확 단어: "응", "몰라", "나중에"
+            - 번호 지정: "1번", "두 번째", "첫 번째 걸로"
+            - 복잡한 필터링: "10만 원 이하", "브랜드별로"
     
             판단 팁:
             - "싫어/별로/마음에 안 들어"만 있어도 재추천 의도로 인정 → VALID.
+            - "5개", "8개" 같은 개수 지정도 재추천 요청으로 인정 → VALID.
             - 번호 지정("1번", "두 번째")은 현재 불가하므로 INVALID 처리.
-            - 가격대 조건("10만 원 이하") 같은 필터링 요구도 INVALID 처리.
+            - 가격대 조건("10만 원 이하") 같은 복잡한 필터링 요구도 INVALID 처리.
     
             엄격 출력 형식:
             - VALID: <한 줄 코멘트>
-              예) "다른 상품으로 다시 추천할게." / "별로라니 다른 거 보여줄게."
+              예) "다른 상품으로 다시 추천할게." / "별로라니 다른 거 보여줄게." / "5개 더 추천해드릴게."
             - INVALID: 재추천 의도를 알아듣지 못했어ㅠㅠ "다른 거/마음에 안 들어" 같이 말해줘!
               (위 INVALID 문구를 **띄어쓰기까지** 완전히 동일하게 출력. 다른 문구 금지)
             """
@@ -168,6 +206,7 @@ class ValidationPrompter:
             "mood_check": ValidationPrompter.get_mood_check_prompt,
             "hobby_check": ValidationPrompter.get_hobby_check_prompt,
             "choose": ValidationPrompter.get_choose_prompt,
+            "recommendation": ValidationPrompter.get_recommendation_prompt,
             "re-recommendation": ValidationPrompter.get_re_recommendation_prompt,
         }
 
@@ -177,18 +216,21 @@ class ValidationPrompter:
         else:
             return ValidationPrompter.get_default_prompt()
 
+    @staticmethod
     def _canonical_invalid(flow: str) -> str:
         mapping = {
             "mood_check":  "기분을 파악하지 못했어ㅠㅠ 다시 입력해줘!",
             "hobby_check": "취미/관심사를 알아듣지 못했어ㅠㅠ 다시 입력해줘!",
-            "choose":      "선택을 알아듣지 못했어ㅠㅠ 둘 중 하나를 선택해줘!",
-            "_default":    "입력을 알아듣지 못했어ㅠㅠ 다시 입력해줘!",
+            "choose": "선택을 알아듣지 못했어ㅠㅠ 둘 중 하나를 선택해줘!",
+            "recommendation": "추천을 알아듣지 못했어ㅠㅠ 둘 중 하나를 선택해줘!",
+            "re-recommendation":  "재추천 의도를 알아듣지 못했어ㅠㅠ \"다른 거/마음에 안 들어\" 같이 말해줘!",
+            "_default":  "입력을 알아듣지 못했어ㅠㅠ 다시 입력해줘!",
         }
         return mapping.get(flow, mapping["_default"])
 
     def _parse_validation_response(self, response: str, flow: str = "_default") -> tuple[bool, str]:
         if not response:
-            return False, self._canonical_invalid(flow)
+            return False, ValidationPrompter._canonical_invalid(flow)
 
         r = response.strip()
         ru = r.upper()
@@ -198,9 +240,9 @@ class ValidationPrompter:
 
         if ru.startswith("INVALID:"):
             msg = r.split(":", 1)[1].strip() if ":" in r else ""
-            canon = self._canonical_invalid(flow)
+            canon = ValidationPrompter._canonical_invalid(flow)
             # 모델이 다른 문구를 넣었으면 강제로 표준 문구로 교체
             return False, (msg if msg == canon else canon)
 
         # 형식을 어겼을 때도 표준 INVALID로 회복
-        return False, self._canonical_invalid(flow)
+        return False, ValidationPrompter._canonical_invalid(flow)

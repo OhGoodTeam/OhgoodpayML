@@ -115,6 +115,30 @@ class ChatPrompter:
         - "알겠어 😄 지금은 🎁 추천 vs 📊 대시보드 중 뭐가 필요해?"
         """
 
+    # @staticmethod
+    # def get_recommendation_prompt(user_name: str) -> str:
+    #     """recommendation 플로우 프롬프트"""
+    #     base_prompt = ChatPrompter.get_base_prompt(user_name)
+    #     return base_prompt + """
+    #     [STATE=choose | GOAL]
+    #     - **새 관심사/변화**를 짧게 인정/공감.
+    #     - 사용자가 지금 원하는 액션을 묻는다: **상품 추천 받기** vs **대시보드 보기**.
+    #     - 답변은 **두 가지 선택지**만 열고, 다른 주제로 샐 여지는 주지 않는다.
+    #
+    #     [DO]
+    #     - 1) 새 관심사 공감 한 마디
+    #     - 2) 두 가지 중 택1을 물어보기(🎁 추천 / 📊 대시보드)
+    #     [DON'T]
+    #     - 상품을 바로 추천하거나, 대시보드 외 다른 기능 언급 금지
+    #
+    #     [OUTPUT TEMPLATE]
+    #     "오 새 취미 멋지다 😆 오늘은 뭐 할래? 🎁 추천 받아볼래, 아니면 📊 대시보드 볼래?"
+    #
+    #     [EXAMPLES]
+    #     - "좋다! 방금 말한 관심사로 갈까? 🎁 추천 받을래, 아니면 📊 대시보드 볼래?"
+    #     - "알겠어 😄 지금은 🎁 추천 vs 📊 대시보드 중 뭐가 필요해?"
+    #     """
+
     @classmethod
     def get_system_prompt_for_flow(cls, flow_state: str, user_name: str, hobby: str = "") -> str:
         """플로우에 따른 시스템 프롬프트 반환"""
@@ -124,10 +148,8 @@ class ChatPrompter:
             return cls.get_hobby_check_prompt(user_name, hobby)
         elif flow_state == "choose":
             return cls.get_choose_prompt(user_name)
-        elif flow_state == "recommendation":
-            return cls.get_recommendation_prompt(user_name)
-        elif flow_state == "re-recommendation":
-            return cls.get_re_recommendation_prompt(user_name)
+        # elif flow_state == "re-recommendation":
+        #     return cls.get_re_recommendation_prompt(user_name)
         else:
             # 기본 방어
             base_prompt = cls.get_base_prompt(user_name)
@@ -138,39 +160,3 @@ class ChatPrompter:
             [OUTPUT TEMPLATE]
             "지금은 추천 플로우만 도와줄 수 있어 😅 먼저 오늘 기분부터 알려줄래?"
             """
-
-    @staticmethod
-    def get_hobby_validation_prompt() -> str:
-        """취미 검증을 위한 프롬프트"""
-        return """
-        [ROLE]
-        너는 사용자 입력에서 유효한 취미를 추출하고 검증하는 전문가야.
-
-        [TASK]
-        사용자가 입력한 텍스트에서 실제 취미나 관심사를 추출해.
-        욕설, 의미없는 텍스트, 장난스러운 입력은 거부해야 해.
-
-        [VALID HOBBY CRITERIA]
-        - 실제 존재하는 취미/활동/관심사 (예: 독서, 요리, 게임, 영화감상, 운동, 그림그리기 등)
-        - 브랜드명이나 구체적인 상품명도 허용 (예: 나이키, 아이폰 등)
-        - 최대 3개까지만 추출
-        - 각 취미는 10자 이내로 정리
-
-        [INVALID INPUT EXAMPLES]
-        - 욕설이나 비속어
-        - 의미없는 반복문자 (예: "ㅋㅋㅋㅋ", "아아아아")
-        - 장난스러운 입력 (예: "미친것", "모르겠음", "아무거나")
-        - 명령어나 질문 (예: "추천해줘", "뭐가 좋아?")
-        - 너무 추상적이거나 모호한 표현
-
-        [OUTPUT FORMAT]
-        유효한 취미가 있으면: "VALID:{취미1},{취미2},{취미3}"
-        유효하지 않으면: "INVALID"
-
-        [EXAMPLES]
-        - 입력: "독서랑 요리 좋아해" → 출력: "VALID:독서,요리"
-        - 입력: "미친것!" → 출력: "INVALID"
-        - 입력: "게임하고 영화보기" → 출력: "VALID:게임,영화감상"
-        - 입력: "ㅋㅋㅋㅋㅋ" → 출력: "INVALID"
-        - 입력: "나이키 운동화 좋아함" → 출력: "VALID:나이키,운동"
-        """
