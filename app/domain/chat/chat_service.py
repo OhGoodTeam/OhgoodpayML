@@ -24,12 +24,12 @@ class ChatService:
             logger.error(f"LLM 호출 실패: {e}")
             return "죄송해요, 잠시 문제가 생겼어요. 다시 시도해주세요."
 
-    async def _generate_updated_summary(self, session_id: str, current_summary: str, user_message: str, assistant_message: str) -> str: 
+    async def _generate_updated_summary(self, session_id: str, current_summary: str, user_message: str, assistant_message: str, flow: str, keyword: str) -> str:
         """기존 요약본을 새로운 대화 내용과 합쳐서 갱신""" 
         try: 
             client = openai_config.get_client() 
             # PayloadBuilder로 페이로드 구성 
-            payload = ChatPayloadBuilder.build_summary_update_payload( session_id, current_summary, user_message, assistant_message ) 
+            payload = ChatPayloadBuilder.build_summary_update_payload( session_id, current_summary, user_message, assistant_message, flow, keyword )
             params = openai_config.get_chat_completion_params( system_message=payload["system_message"], user_message=payload["user_message"] ) 
             response = await client.chat.completions.create(**params) 
             new_summary = response.choices[0].message.content.strip()
@@ -40,9 +40,11 @@ class ChatService:
             return current_summary
 
     async def generate_chat(self, request: BasicChatRequest) -> BasicChatResponse:
-        # 1) 정규화
+        # 정규화
         request.hobby = ChatPayloadBuilder.normalize_hobby(request.hobby)
 
+        # 키워드 초기화
+        keyword: str | None = None
         message = ""
         new_hobby = ""
         products: list = []  # 안전 초기화
@@ -60,7 +62,6 @@ class ChatService:
                 new_hobby = request.input_message
                 logger.warning(f"new_hobby랑 플로우 체크하기!!! : {new_hobby}, {request.flow}")
 
-
         # 3) 추천 단계: RecommendService
         elif request.flow in (Flow.RECOMMENDATION.value, Flow.RE_RECOMMENDATION.value):
             if request.flow == Flow.RECOMMENDATION.value:
@@ -71,6 +72,9 @@ class ChatService:
                     credit_limit=request.customer_info.credit_limit,
                     balance=request.balance
                 )
+                # 키워드 찍어보기
+                logger.warning(f"keyword잘 넘어오는지 확인하기 : {keyword}")
+
                 products = await self.recommend_service.search_products_async(keyword=keyword, price_range=price_range)
 
                 # 상품을 Boot에 전달 (Boot에서 하나씩 꺼내서 사용)
@@ -92,7 +96,9 @@ class ChatService:
                 session_id=request.session_id,
                 current_summary=request.summary,
                 user_message=request.input_message,
-                assistant_message=message
+                assistant_message=message,
+                flow=request.flow,
+                keyword=keyword  # 키워드가 있을 때만 전달
             )
         except Exception as e:
             logger.error(f"요약본 갱신 중 오류: {e}")

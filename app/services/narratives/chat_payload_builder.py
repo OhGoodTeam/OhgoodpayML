@@ -3,8 +3,11 @@ Chat Payload Builder
 
 채팅 요청을 위한 페이로드 구성 로직을 관리하는 클래스
 """
+import logging
 
 from app.schemas.chat.basic_chat_request import BasicChatRequest
+
+logger = logging.getLogger(__name__)
 
 class ChatPayloadBuilder:
     """채팅 요청 페이로드 구성기"""
@@ -31,39 +34,87 @@ class ChatPayloadBuilder:
             """
         
         return user_message.strip()
-    
+
     @staticmethod
-    def build_summary_update_payload(session_id: str, current_summary: str, user_message: str, assistant_message: str) -> dict:
-        """대화 요약 갱신을 위한 페이로드 구성"""
-        system_message = """
-        너는 대화 요약 전문가야. 기존 대화 요약본과 새로운 대화 내용을 받아서 통합된 요약본을 만들어줘.
-        
-        요약본 작성 규칙:
-        1. 중요한 정보는 유지 (취미, 기분, 예산, 관심사 등)
-        2. 중복된 내용은 통합
-        3. 대화의 흐름과 맥락을 보존
-        4. 2-3문장으로 간결하게 정리
-        5. 사용자의 현재 상태와 관심사에 집중
-        
-        응답 형식: 통합된 요약본만 반환 (설명 없이)
-        """
-        
-        user_prompt = f"""
-        기존 요약본: {current_summary}
-        
-        새로운 대화:
+    def build_summary_update_payload(
+            session_id: str,
+            current_summary: str,
+            user_message: str,
+            assistant_message: str,
+            flow: str,
+            keyword: str | None = None,
+    ) -> dict:
+        import textwrap
+
+        cur = (current_summary or "").strip()
+        norm_kw = (keyword or "").strip().replace("\n", " ")
+
+        # 로그(선택): 지연 포맷으로 성능 좋게
+        logger.info("요약용 flow=%s, keyword=%s", flow, norm_kw or "미생성")
+
+        base_rules = textwrap.dedent("""\
+        너는 '대화 요약 전문가'다. 기존 요약과 새로운 대화를 통합해 최신 요약본을 만들어라.
+    
+        [요약 목표]
+        - 사용자 상태(취미/기분/예산/관심사)와 진행 맥락을 보존하되, 중복을 제거하고 간결하게 업데이트한다.
+    
+        [절대 규칙]
+        1) 사실 검증: 현재 입력(user/assistant)과 기존 요약에 없는 정보는 지어내지 않는다(추측·일반화 금지).
+        2) 중요도 우선순위: 최근 정보 > 기존 정보. 충돌 시 최신 대화 내용을 채택하고 과거 표현은 제거·치환한다.
+        3) 간결성: 최종 결과는 2~3문장, 하나의 단락만 허용. 불릿/번호/머리말/메타설명/코드블록/따옴표 금지.
+        4) 톤&언어: 한국어 평서문, 정보 중심. 이모지/과장 표현 금지.
+        5) 개인정보·민감정보 추가 금지. 추측으로 값을 보완하지 않는다.
+        6) 용어 정규화: 취미/기분/예산 등은 중복 표현을 합치고 동일 용어를 사용한다.
+        7) 길이 상한: 350자 이내(권장 200~300자).
+        """)
+
+        if flow in ("recommend", "re-recommend"):
+            extra_rules = textwrap.dedent(f"""\
+            [키워드 규칙(필수)]
+            - 단일 키워드만 사용한다.
+            - 최종 출력은 **문단 맨 끝**이 정확히 "키워드: {norm_kw or '미생성'}" 으로 끝나야 한다.
+            - '키워드:' 꼬리표 앞에는 한 칸 공백을 두고 붙인다. 예: "... 제안했다. 키워드: 러닝화"
+            - 키워드 뒤에는 **마침표/쉼표/공백/줄바꿈을 붙이지 않는다**(키워드가 마지막 문자).
+            """)
+        else:
+            extra_rules = textwrap.dedent("""\
+            [키워드 규칙(금지)]
+            - 추천 흐름이 아니므로 최종 문단에 '키워드:' 문구를 포함하지 않는다.
+            """)
+
+        system_message = textwrap.dedent(
+            base_rules + extra_rules + """\
+            [출력 형식]
+            - 통합된 요약문 단 한 단락만 출력한다. 머리말/해설/레이블을 덧붙이지 않는다.
+            """
+        )
+
+        assistant_message = (assistant_message or "").strip() or "대화 내용을 요약에 반영했어."
+
+        keyword_info = ""
+        if flow in ("recommend", "re-recommend"):
+            keyword_info = f"\n생성된 추천 키워드(원문): {norm_kw or '미생성'}"
+
+        user_prompt = textwrap.dedent(f"""\
+        현재 흐름(flow): {flow}{keyword_info}
+    
+        기존 요약본(없으면 빈 문자열): {cur}
+    
+        신규 대화:
         사용자: {user_message}
         레이: {assistant_message}
-        
-        위 내용을 통합한 새로운 요약본을 작성해줘.
-        """
-        
+    
+        요구사항:
+        - 위의 규칙을 지켜 기존 요약을 최신 상태로 갱신하라.
+        - 결과는 한 단락, 2~3문장, 한국어로만 작성하며, (추천 흐름인 경우) 문단 맨 끝이 정확히 '키워드: {norm_kw or '미생성'}'로 끝나게 하라.
+        """)
+
         return {
             "session_id": session_id,
-            "system_message": system_message,
-            "user_message": user_prompt
+            "system_message": system_message.strip(),
+            "user_message": user_prompt.strip(),
         }
-    
+
     @staticmethod
     def build_keyword_generation_payload(hobby: str, mood: str, credit_limit: int, balance: int) -> dict:
         """키워드 생성을 위한 페이로드 구성"""

@@ -1,3 +1,4 @@
+import logging
 """
 Validation Prompter
 
@@ -6,6 +7,7 @@ Validation Prompter
 
 class ValidationPrompter:
     """유효성 검증 플로우별 프롬프트 생성기"""
+
     @staticmethod
     def get_base_validation_rule() -> str:
         return """
@@ -88,7 +90,11 @@ class ValidationPrompter:
     # 선택에 관련된 프롬프터이다.
     @staticmethod
     def get_choose_prompt() -> str:
+        logger = logging.getLogger(__name__) # 로그 찍을 용도
+
         base_rule = ValidationPrompter.get_base_validation_rule()
+        # 선택 플로우에 잘 들어오는지 확인하기
+        logger.info(f"choose 프롬프터로 들어오는지 확인하기")
         return f"""
         {base_rule}
     
