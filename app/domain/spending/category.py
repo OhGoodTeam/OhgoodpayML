@@ -69,7 +69,7 @@ RULES: List[Tuple[re.Pattern, str, float]] = [
     (re.compile(r"(넷플릭스|netflix|youtube\s*premium|tving|wavve|watcha|멜론)", re.I), "SUBSCRIPTION", 0.9),
     (re.compile(r"(sk텔레콤|kt\b|lg유플러스|통신요금)", re.I), "COMMUNICATION", 0.8),
     (re.compile(r"(한전|한국전력|상수도|수도|가스공사|도시가스)", re.I), "UTILITIES", 0.9),
-    (re.compile(r"(쿠팡|11번가|네이버쇼핑|g마켓|옥션|무신사|스마트스토어|지그재그|에이블리|올리브영)", re.I), "SHOPPING", 0.7),
+    (re.compile(r"(쿠팡|11번가|네이버쇼핑|g마켓|옥션|무신사|스마트스토어|지그재그|에이블리|올리브영|세럼|비타민 세럼|)", re.I), "SHOPPING", 0.7),
     (re.compile(r"(치과|의원|병원|약국|이비인후과|정형외과)", re.I), "HEALTHCARE", 0.8),
     (re.compile(r"(대한항공|아시아나|진에어|제주항공|에어부산|티웨이|항공)", re.I), "TRAVEL", 0.7),
     (re.compile(r"(호텔|야놀자|여기어때)", re.I), "HOTEL", 0.7),
