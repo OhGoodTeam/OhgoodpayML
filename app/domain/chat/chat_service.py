@@ -64,22 +64,22 @@ class ChatService:
 
         # 3) 추천 단계: RecommendService
         elif request.flow in (Flow.RECOMMENDATION.value, Flow.RE_RECOMMENDATION.value):
-            if request.flow == Flow.RECOMMENDATION.value:
-                # 초기 추천: 새로운 상품 검색 후 캐싱
-                keyword, price_range = await self.recommend_service.generate_keywords_async(
-                    hobby=request.hobby,
-                    mood=request.mood,
-                    credit_limit=request.customer_info.credit_limit,
-                    balance=request.balance
-                )
-                # 키워드 찍어보기
-                logger.warning(f"keyword잘 넘어오는지 확인하기 : {keyword}")
+            # 초기 추천: 새로운 상품 검색 후 캐싱
+            keyword, price_range = await self.recommend_service.generate_keywords_async(
+                hobby=request.hobby,
+                mood=request.mood,
+                credit_limit=request.customer_info.credit_limit,
+                balance=request.balance,
+                summary=request.summary
+            )
+            # 키워드 찍어보기
+            logger.warning(f"keyword잘 넘어오는지 확인하기 : {keyword}")
 
-                products = await self.recommend_service.search_products_async(keyword=keyword, price_range=price_range)
+            products = await self.recommend_service.search_products_async(keyword=keyword, price_range=price_range)
 
-                # 상품을 Boot에 전달 (Boot에서 하나씩 꺼내서 사용)
-                if not products:
-                    products = []
+            # 상품을 Boot에 전달 (Boot에서 하나씩 꺼내서 사용)
+            if not products:
+                products = []
 
         # 4) 허용되지 않은 플로우가 들어올 경우, mood_check로 유도해서 첫 플로우 부터 시작하게 하기 위함이다.
         else:
