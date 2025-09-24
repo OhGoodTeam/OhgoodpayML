@@ -45,6 +45,7 @@ class ScoreResultOut(BaseModel):
 class SayMyNameIn(InputFeaturesIn):  # ← 기존 점수 입력 스키마 상속
     customer_id: Optional[str] = Field(default=None, alias="customerId")
     username: Optional[str] = None
+    name: Optional[str] = None
     grade: Optional[str] = None
     ohgood_score: Optional[int] = Field(default=None, alias="ohgoodScore")
 
