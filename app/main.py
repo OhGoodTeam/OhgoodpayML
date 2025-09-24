@@ -21,6 +21,7 @@ app = FastAPI(title="Ohgoodpay ML", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
     # allow_origins=ALLOWED_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,7 +38,7 @@ app.include_router(advice.router, prefix=API_PREFIX)
 app.include_router(chat.router, prefix=API_PREFIX)
 
 # 이미지 프록시 라우터
-app.include_router(image_proxy.router, prefix=API_PREFIX) 
+app.include_router(image_proxy.router, prefix="/api")
 
 # 간단 핑 엔드포인트 — 필요 없으면 삭제 가능
 @app.get(API_PREFIX + "/ping")

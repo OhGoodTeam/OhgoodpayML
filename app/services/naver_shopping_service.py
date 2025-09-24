@@ -1,5 +1,6 @@
 import httpx
 import logging
+import urllib.parse
 from typing import List
 from app.config.naver_config import naver_config
 from app.schemas.recommend.product_dto import ProductDto
@@ -48,15 +49,15 @@ class NaverShoppingService:
                         title = self._remove_html_tags(item.get("title", ""))
                         category = item.get("category1", "") + " > " + item.get("category2", "")
 
-                        # 네이버 원본 이미지 URL 그대로 반환 (Spring Boot에서 프록시 처리)
+                        # 네이버 원본 이미지 URL을 프록시 URL로 변환
                         original_image = item.get("image", "")
-                        proxy_image = original_image if original_image else ""
-                        
+                        # proxy_image = f"/image-proxy?url={urllib.parse.quote(original_image)}" if original_image else ""
+                        #
                         product = ProductDto(
                             rank=i,
                             name=title,
                             price=price,
-                            image=proxy_image,
+                            image=original_image,
                             url=item.get("link", ""),
                             category=category.strip(" > ")
                         )
@@ -67,7 +68,7 @@ class NaverShoppingService:
                         logger.debug(f"실패한 항목 데이터: {item}")
                         continue
 
-                # logger.info(f"네이버 쇼핑 검색 완료: query={query}, API응답={len(items)}개, 파싱성공={len(products)}개")
+                logger.info(f"----------상품 체크하기 : {products}")
                 return products
                 
                 # TODO : 상품 요청 실패시, flow를 어떻게 처리할지는 고민이 필요하다.

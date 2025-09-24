@@ -1,4 +1,6 @@
 # routers/chat.py
+import logging
+
 from fastapi import APIRouter, HTTPException, Depends
 from app.schemas.chat.basic_chat_response import BasicChatResponse
 from app.schemas.chat.basic_chat_request import BasicChatRequest
@@ -27,7 +29,6 @@ async def generate_chat(
     try:
         # Service 호출
         response = await chat_service.generate_chat(request)
-        
         # 성공 응답
         return response
     
