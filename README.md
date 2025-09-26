@@ -1,5 +1,5 @@
 # OhgoodpayML
-Ohgoodpay Reco&amp;Analytics
+Ohgoodpay Reco&amp;Dashboard
 
 ## 개발 환경(venv) 빠른 시작
 
