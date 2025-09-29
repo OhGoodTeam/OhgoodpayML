@@ -1,5 +1,5 @@
 # OhgoodpayML
-Ohgoodpay Reco&amp;Analytics
+Ohgoodpay Reco&amp;Dashboard
 
 ## 개발 환경(venv) 빠른 시작
 
@@ -27,7 +27,7 @@ source .venv/bin/activate
 ### 3) 패키지 설치
 ```
 python -m pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txt  ## 의존성 동기화
 ```
 
 ### 4) 서버 실행
@@ -40,3 +40,12 @@ deactivate
 - Swagger: http://localhost:8000/docs
 - 데모 페이지: http://localhost:8000/v1/demo
 - 핑: http://localhost:8000/v1/ping
+
+
+### 5) 패키지 버전 관리  
+패키지 추가/업데이트 후에는 **가상환경 활성화 상태**에서 버전을 고정하고 커밋
+```
+  pip freeze > requirements.txt   ## 업데이트
+  pip install -r requirements.txt ## 동기화(동료/배포 환경)
+
+``` 
