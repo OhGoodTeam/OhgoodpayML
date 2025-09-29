@@ -14,7 +14,7 @@ favicon_ico: "/assets/images/shinhanmoilicon.ico"
 
 aux_links:
   "OhGoodFood on GitHub":
-    - "https://github.com/OhGoodTeam/OhGoodpayML.git"
+    - "https://github.com/OhGoodTeam/OhgoodpayML.git"
 
 # Makes Aux links open in a new tab. Default is false
 aux_links_new_tab: false
