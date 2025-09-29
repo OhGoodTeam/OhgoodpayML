@@ -141,11 +141,13 @@ class RecommendService:
         내부 서비스용: 키워드와 가격대 생성
         """
         return await self._generate_llm_keywords(hobby, mood, credit_limit, balance, summary)
-    
+
 
     async def search_products_async(self, keyword: str, price_range: str) -> list[ProductDto]:
         """
         내부 서비스용: 상품 검색 - 네이버 쇼핑 API 연동
+
+        필터링 결과 없을때도 나올 수 있도록 로직 수정.
         """
         try:
             # 가격대 필터링이 있을 때는 더 많은 상품을 가져와서 필터링 후 10개 확보
@@ -154,7 +156,7 @@ class RecommendService:
             # 네이버 쇼핑 API로 상품 검색
             products = await self.naver_shopping_service.search_products(keyword, display=display_count)
 
-            # 가격대 필터링 (선택적) - 해당 가격대의 상품이 있는 경우에만 필터링을 진행한다.
+            # 가격대 필터링 (선택적)
             if price_range and "-" in price_range:
                 try:
                     min_price, max_price = map(int, price_range.split("-"))
@@ -162,16 +164,24 @@ class RecommendService:
                         p for p in products
                         if min_price <= p.price <= max_price
                     ]
-                    # 필터링 후 최대 10개만 반환
-                    products = filtered_products[:10]
-                    logger.info(f"필터링 결과: {len(filtered_products)}개 중 {len(products)}개 반환")
+
+                    # 필터링 결과가 3개 이하면 원본에서 채워넣기
+                    if len(filtered_products) <= 3:
+                        logger.info(f"필터링 결과가 {len(filtered_products)}개로 부족하여 원본 데이터로 채움")
+                        products = products[:10]
+                    else:
+                        # 필터링 결과가 충분하면 최대 10개만 반환
+                        products = filtered_products[:10]
+                        logger.info(f"필터링 결과: {len(filtered_products)}개 중 {len(products)}개 반환")
+
                 except ValueError:
                     logger.warning(f"가격대 파싱 실패: {price_range}")
                     products = products[:10]  # 필터링 실패시 원본에서 10개
+            else:
+                products = products[:10]
 
             return products
-            
+
         except Exception as e:
             logger.error(f"상품 검색 실패: keyword={keyword}, error={e}")
-            # 빈 리스트 반환하거나 예외를 다시 raise
             return []
