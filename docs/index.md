@@ -4,11 +4,15 @@ layout: home ## 이건 기본 레이아웃이라 변경하면 안된다.
 nav_order: 1
 ---
 
-# 🥖 **OhGoodPay - 지금 사고 돈은 나중에~!**
+<h1>
+  OhgoodPay<br>
+ <h2>페이와 숏폼이 붙었다 쓰는 순간 즐거워지는 오굿페이</h2>
+</h1>
+
 <br>
-<a href="https://ohgoodpay.com">
-    <img src="assets/images/썸네일.png" style="display: block; margin: 0 auto;" />
-</a>
+<a href="https://ohgoodteam.shinhanacademy.co.kr/">
+    <img src="assets/images/thumb.jpg" style="display: block; margin: 0 auto;" />
+</a>s
 
 <p style="text-align: center;">이미지를 클릭하면 ohgoodpay로 이동합니다.</p>
 
@@ -194,53 +198,107 @@ src/
 
 ----------------------------
 
-<h2 id="보안">🕶️ 보안</h2>
-
-> 사장님과 일반 사용자가 함께 이용하는 애플리케이션인 만큼, 보안 취약점에 대한 철저한 대비가 필요했습니다.
-> 최근 잇따른 보안 사고를 고려하여, 자주 발생할 수 있는 주요 보안 이슈들에 대한 대책을 수립하고 모두 적용하였습니다.
-
-### 1️⃣ SQL Injection
-
-**개념**
-
-- **SQL Injection** 은 공격자가 입력값에 악의적인 SQL 코드를 삽입해 데이터베이스를 조작하는 기법입니다.
-- 예를 들어, 로그인 폼에 `’ OR ’1’=’1` 과 같은 문자열을 넣으면 비밀번호 검사 로직을 우회하여 사이트에 접속이 가능합니다.
-
-**대응 방법: MyBatis `#{}` 바인딩**
-
-- `#{}` 로 전달된 값은 **JDBC `PreparedStatement`** 의 파라미터로 처리됩니다.
-- 모든 mapper에 `#{}` 바인딩을 적용하여  SQL Injection을 방지하였습니다.
-- SQL 문과 데이터가 분리되므로, 입력값은 자동으로 이스케이프되어 쿼리 구조 변경이 불가능합니다.
-
-### 2️⃣ XSS 방지
-
-**개념**
-
-- XSS는 `<script>` 삽입을 통해 악성 스크립트를 실행해 정보를 탈취하거나 조작하는 공격입니다.
-
-**대응 방법 : 요청 파라미터를 HTML 이스케이프 처리**
-
-- `XSSFilter` + `XSSRequestWrapper` 로 모든 요청 파라미터를 HTML 이스케이프 처리하고, Spring 전역 `StringEscapeEditor` 를 통해 `@RequestParam`/`@ModelAttribute` 로 바인딩되는 문자열까지 필터링해 방어합니다.
-- [관련 깃 이슈](https://github.com/OhGoodTeam/OhGoodFood/issues/139)
-
-### 3️⃣ 파일 업로드 검증 (비인가 파일 업로드 차단)
-
-**개념**
-
-- CSRF는 사용자의 인증된 세션을 악용해 원치 않는 요청을 실행하는 공격입니다.
-
-**대응 방법 : 이미지 확장자에 해당하는 파일들만 허용**
-
-- S3 업로드 시 **.jpg, .jpeg, .png** 확장자만 허용하도록 필터링해 비인가 파일 삽입을 차단합니다.
-
-----------------------------
-
 <h2 id="빌드-방법">🚀 빌드 방법</h2>
+
+### OhgoodpayBE
+
+### 1) Java 버전 확인
+```bash
+java --version
+# JDK 17 필요
+```
+
+### 2) FFmpeg 설치
+```bash
+# Windows
+# https://www.ffmpeg.org/download.html 에서 다운로드 후 PATH 등록
+
+# macOS
+brew install ffmpeg
+
+# Linux / EC2
+sudo yum install -y ffmpeg
+
+# 설치 확인
+ffmpeg -version
+```
+
+### 3) 프로젝트 빌드
+```bash
+# Windows
+./gradlew.bat clean build
+
+# macOS / Linux
+./gradlew clean build
+```
+
+### 4) 서버 실행
+```bash
+# Gradle로 실행
+./gradlew bootRun
+
+# 또는 JAR 직접 실행
+java -jar build/libs/*.jar
+```
+
+**접속 URL**
+- Swagger: http://localhost:8080/swagger-ui/index.html
+- API Base: http://localhost:8080
+
+### 5) 의존성 관리
+의존성 추가/변경 시 build.gradle 수정 후 동기화
+```bash
+./gradlew clean build    # 의존성 업데이트
+./gradlew dependencies   # 의존성 확인
+```
+### 기술 스택
+- **JDK**: 17
+- **Framework**: Spring Boot 3.5.5
+- **Database**: MariaDB
+- **Build**: Gradle (Groovy)
+
+### 주요 의존성
+- Spring Boot DevTools
+- Spring Data JPA
+- Spring Security
+- MariaDB Driver
+- Lombok
+- JWT (jsonwebtoken 0.12.6)
+- QueryDSL 5.0.0
+- Swagger 2.6.0
+- FFmpeg 8.0
+- ZXing (QR/바코드)
+  - com.google.zxing:core:3.5.2
+  - com.google.zxing:javase:3.5.2
+
+### 데이터베이스 설정
+```properties
+# application.properties
+spring.datasource.url=jdbc:mariadb://localhost:3306/your_database
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+```
+
+### Docker 배포
+```bash
+# 이미지 빌드
+docker build -t app-backend .
+
+# 컨테이너 실행
+docker run -p 8080:8080 app-backend
+```
+
+### Podman 배포
+- 애플리케이션 이미지에 FFmpeg 포함 필수
+- `/tmp` 폴더 권한 확인 필요
+
+---  
 
 ### OhgoodpayML
 Ohgoodpay Reco&amp;Analytics
 
-### 개발 환경(venv) 빠른 시작
+### 가상 환경(venv) 빠른 시작
 
 ### 1) Python 버전 확인
 ```bash
@@ -251,14 +309,14 @@ python --version
 - 가상환경 이름은 꼭 .venv가 아니어도 됨   
 
 ```
-python -m venv .venv 
-.\.venv\Scripts\Activate
+python -m venv venv 
+.\venv\Scripts\Activate
 
-python -m venv .venv # windows / git bash
-source .venv/Scripts/activate
+python -m venv venv # windows / git bash
+source venv/Scripts/activate
 
-python -m venv .venv # macOS / Linux / WSL
-source .venv/bin/activate
+python -m venv venv # macOS / Linux / WSL
+source venv/bin/activate
 ```    
 
 ### 3) 패키지 설치  
@@ -275,16 +333,41 @@ deactivate   ## 비활성화
 ```  
 - Swagger: http://localhost:8000/docs
 
+---  
+### OhgoodpayFE  
+Ohgoodpay Frontend (React + Vite)  
+
+### 1) Node.js 버전 확인
+```bash
+node --version
+npm --version
+```  
+### 2) 프로젝트 초기 설정
+```bash
+npm install
+```
+package.json 기준으로 필요한 의존성 자동 설치
+
+### 3) 개발 서버 실행
+``` bash  
+npm run dev
+```    
+기본 접속 주소: http://localhost:5173
+
+### 4) 빌드
+```bash  
+npm run build
+```
 ----------------------------
 
 <h2 id="협업-규칙">🤝 협업 규칙</h2>
 
-### 🥖 Branch 규칙
+### 🎈 Branch 규칙
 - 메인 브랜치와 개인 이름별 브랜치를 구분하여 사용한다.
   - main : 배포 가능한 상태의 코드만을 관리하는 브랜치
   - dev  : main 배포 전 전체 기능 통합 test 브랜치
 
-### 🥖 Commit 규칙
+### 🎈 Commit 규칙
 - 커밋 메세지는 다음과 같은 형식으로 작성한다.
 
 ```java
@@ -296,10 +379,13 @@ deactivate   ## 비활성화
     - docs : 정적 파일 추가
     - fix : 버그 수정
 
-### 🥖 PR 규칙
-- 공용 템플릿을 사용하여 PR을 작성 : [PR 템플릿 바로가기](https://github.com/OhGoodTeam/OhGoodFood/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
+### 🎈 PR 규칙
+- 공용 템플릿을 사용하여 PR을 작성 : [PR 템플릿 바로가기](https://github.com/OhGoodTeam/OhgoodpayML/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
 
-### 🥖 Issue 규칙
-- 공용 템플릿을 사용하여 issue 작성 : [issue 템플릿 바로가기](https://github.com/OhGoodTeam/OhGoodFood/tree/main/.github/ISSUE_TEMPLATE)
+### 🎈 Issue 규칙
+- 공용 템플릿을 사용하여 issue 작성 : [issue 템플릿 바로가기](https://github.com/OhGoodTeam/OhgoodpayML/tree/main/.github/ISSUE_TEMPLATE)
 
+### 🎈 데일리 스크럼 
+- 공용 템플릿을 사용하여 데일리 스크럼 작성   
+<img src="assets/images/daily.png" style="display: block; margin: 0 auto;" />
 
