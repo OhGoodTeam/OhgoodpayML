@@ -7,7 +7,6 @@ has_toc:   false    # 자동 TOC(자식 목록) 비활성화
 
 # 📖 OhgoodPay - 전체 사용 설명서
 <br>
-<img src="{{ site.baseurl }}/assets/images/guide/main_guide.png" alt="가이드라인" style="display: block; margin: 0 auto;" />
 
 > ✅ 이 문서는 OhgoodPay 사용설명서 입니다.  
 > 원하는 가이드라인을 선택해 자세한 내용을 확인하세요!

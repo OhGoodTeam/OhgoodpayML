@@ -1,5 +1,5 @@
 ---
-title: OHGOODPAY
+title: OhgoodPay
 layout: home ## 이건 기본 레이아웃이라 변경하면 안된다.
 nav_order: 1
 ---
@@ -12,7 +12,7 @@ nav_order: 1
 <br>
 <a href="https://ohgoodteam.shinhanacademy.co.kr/">
     <img src="assets/images/thumb.jpg" style="display: block; margin: 0 auto;" />
-</a>s
+</a>
 
 <p style="text-align: center;">이미지를 클릭하면 ohgoodpay로 이동합니다.</p>
 

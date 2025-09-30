@@ -1,137 +1,151 @@
 {"0": {
-    "doc": "관리자 가이드",
-    "title": "😎 OhgoodPay - 관리자 (어드민) 전용 가이드",
-    "content": "이 문서는 OhgoodPay 플랫폼을 관리하는 관리자를 위한 운영 가이드입니다. 회원 관리, 가게 관리 등의 어플 내 전 내역 관리 과정을 상세히 설명합니다. 📋 목차 . | 로그인 | [회원관리] 회원 조회 및 정보 수정 | [가게관리] 가게 조회 및 수정, 매출관리 | [주문 내역 관리] 주문 내역 &amp; 결제 내역 조회 | [알람 관리] 알람 조회 및 알람 보내기 | [리뷰 관리] 알람 조회 및 알람 보내기 | . 1️⃣ 로그인 . | 로그인 | 메인 페이지 | . | | | . | 승인된 어드민 계정을 통해 로그인이 가능합니다. | 로그인 후, 어드민 메인 페이지로 이동합니다. | 어드민 메인 페이지에서는 어플의 전체적인 통계를 확인할 수 있습니다. | . 2️⃣ [회원관리] 회원 조회 및 정보 수정 . | 회원 관리 - 조회 | 특정 회원 검색 | . | | | . | 회원 정보 수정 | 정보 수정 및 저장 | . | | | . | 회원 조회 . | 전체 회원을 조회할 수 있습니다. | ID, 이름, 닉네임을 통해 특정 회원을 조회할 수 있습니다. | . | 회원 정보 수정 . | ID를 통해 유저 정보를 가져와서 정보 수정이 가능합니다. | 이름, 전화번호, 계정 활성화 여부, 위치 정보 동의 여부를 수정할 수 있습니다. | . | . 3️⃣ [가게관리] 가게 조회 및 수정, 매출관리 . | 전체 가게 조회 | 특정 가게 검색 | . | | | . | 미승인 가게 관리 | 미승인 가게 검색, 승인 | . | | | . | 가게 관리 - 매출 조회 | 특정 ID, 기간으로 조회 | . | | | . | 가게 조회 . | 전체 등록되어 있는 가게 정보를 조회합니다. | ID, 가게명, 대표명을 통해 특정 가게 검색이 가능합니다. | . | 가게 승인 . | 승인이 안 된 가게 목록들을 보여줍니다. | id를 통해 특정 가게를 조회하는 것이 가능합니다. | 승인 여부 체크박스를 누르고 저장하면, 가게 승인이 가능합니다. | . | 가게 관리 . | id 검색과 기간 설정을 통해 특정 가게의 특정 기간 매출 누계를 확인할 수 있습니다. | . | . 4️⃣ [주문 내역 관리] 주문 내역 &amp; 결제 내역 조회 . | 전체 주문내역 조회 | 특정 ID 주문내역 조회 | . | | | . | 전체 결제내역 조회 | 특정 ID 결제내역 조회 | . | | | . | 주문 내역 조회 . | 고객 ID, 가게 ID, 주문 번호를 통해 특정 회원의 특정 주문/결제 내역을 검색할 수 있습니다. | 주문 상태를 강제로 수정할 수 있습니다. | . | 결제 내역 조회 (기능 수정 중이므로 미완성) | . 5️⃣ [알람 관리] 알람 조회 및 알람 보내기 . | 전체 알람내역 조회 | 특정 ID 알람내역 조회 | . | | | . | 알람 보내기 - 알람 발송 | 사용자 알람 확인 | . | | | . | 알람 조회 . | 전체 알람 리스트를 조회할 수 있습니다. | 수신 ID 를 통해 받은 알람을 검색할 수 있습니다. | 읽음 상태, 알람 표시 여부를 강제로 설정할 수 있습니다. | . | 알람 보내기 . | 존재하는 ID를 확인하여 알람을 보낼 수 있습니다. | 존재하지 않는 ID로는 알람을 보낼 수 없습니다. 존재하는 아이디인지 꼭 확인해주세요! | 알람이 성공적으로 발송되면, 해당 ID를 가진 유저에게 보낸 알람이 도착합니다. | . | . 6️⃣ [리뷰 관리] 알람 조회 및 알람 보내기 . | 전체 리뷰내역 조회 | 특정 ID 리뷰내역 조회 | . | | | . | 리뷰 조회 . | 고객 ID, 가게 ID, 리뷰 번호를 통해 특정 리뷰를 검색할 수 있습니다. | 리뷰는 숨김, 보임 여부를 설정할 수 있습니다. | 이를 통해 상관없는 리뷰나, 규정을 위반한 리뷰를 숨김처리 할 수 있습니다. | . | . 📞 고객센터 문의 . | 이메일: help@ohgoodfood.co.kr | 운영시간: 평일 10:00 ~ 18:00 | . © 2025 OhGoodFood. All Rights Reserved. ",
-    "url": "/OhGoodPay/pages/ai_guide.html#-ohgoodpay---%EA%B4%80%EB%A6%AC%EC%9E%90-%EC%96%B4%EB%93%9C%EB%AF%BC-%EC%A0%84%EC%9A%A9-%EA%B0%80%EC%9D%B4%EB%93%9C",
+    "doc": "AI 서비스 이용하기",
+    "title": "😎 OhgoodPay - AI 서비스 이용 방법",
+    "content": "이 문서는 OhgoodPay의 AI 서비스를 이용하는 사용자들을 위한 가이드입니다. 챗봇과 대시보드 서비스에 대해서 상세히 설명합니다. 📋 목차 . | 챗봇 서비스 | 대시보드 서비스 | . ",
+    "url": "/OhGoodPay/pages/ai_guide.html#-ohgoodpay---ai-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9D%B4%EC%9A%A9-%EB%B0%A9%EB%B2%95",
     
-    "relUrl": "/pages/ai_guide.html#-ohgoodpay---관리자-어드민-전용-가이드"
+    "relUrl": "/pages/ai_guide.html#-ohgoodpay---ai-서비스-이용-방법"
   },"1": {
-    "doc": "관리자 가이드",
-    "title": "관리자 가이드",
+    "doc": "AI 서비스 이용하기",
+    "title": "1️⃣ 챗봇 서비스",
+    "content": "| 챗봇 서비스 | 상품 추천 서비스 | . | | | . | 챗봇을 이용해서 OhgoodPay서비스에 관해 궁금한 사항을 질문할 수 있습니다. | 사용자 기분이나 취미 등을 파악해 상품을 추천받을 수 있습니다. | 이때 상품은 Naver 쇼핑 API를 이용해 보다 정확한 상품을 추천받을 수 있습니다. | . ",
+    "url": "/OhGoodPay/pages/ai_guide.html#1%EF%B8%8F%E2%83%A3-%EC%B1%97%EB%B4%87-%EC%84%9C%EB%B9%84%EC%8A%A4",
+    
+    "relUrl": "/pages/ai_guide.html#1️⃣-챗봇-서비스"
+  },"2": {
+    "doc": "AI 서비스 이용하기",
+    "title": "2️⃣ 대시보드 서비스",
+    "content": "| 대시보드 서비스 | 특정 회원 검색 | . | | | . | 사용자는 대시보드에서 오굿스코어, 이번달 사용내역, 3개월 소비 패턴 분석, AI 조언에 대한 정보를 얻을 수 있습니다. | 오굿스코어는 연장여부, 등급 점수, 제재여부, 결제 횟수 와 금액 등을 종합적으로 고려해 도출한 점수입니다. | 신용점수의 일종으로 추후 사용자 분석에 활용할 수 있습니다. | 이번달 결제 내역을 티커로 확인할 수 있고, 3개월 소비 패턴에 대한 시각자료로 직관적으로 파악할 수 있습니다. | 사용자의 정보를 분석해 AI에게 3가지의 조언을 받을 수 있습니다. | . © 2025 OhGoodPay. All Rights Reserved. ",
+    "url": "/OhGoodPay/pages/ai_guide.html#2%EF%B8%8F%E2%83%A3-%EB%8C%80%EC%8B%9C%EB%B3%B4%EB%93%9C-%EC%84%9C%EB%B9%84%EC%8A%A4",
+    
+    "relUrl": "/pages/ai_guide.html#2️⃣-대시보드-서비스"
+  },"3": {
+    "doc": "AI 서비스 이용하기",
+    "title": "AI 서비스 이용하기",
     "content": " ",
     "url": "/OhGoodPay/pages/ai_guide.html",
     
     "relUrl": "/pages/ai_guide.html"
-  },"2": {
+  },"4": {
     "doc": "OhgoodPay 사용 설명서",
     "title": "📖 OhgoodPay - 전체 사용 설명서",
     "content": ". ✅ 이 문서는 OhgoodPay 사용설명서 입니다. 원하는 가이드라인을 선택해 자세한 내용을 확인하세요! . | 가이드 | 설명 | 바로가기 | . | 페이 서비스 이용하기 | 페이 사용자를 위한 기본 가이드 | 페이 서비스 | . | 숏폼 서비스 이용하기 | 숏폼 서비스 사용자를 위한 기본 가이드 | 숏폼 서비스 | . | AI 서비스 이용하기 | 대시보드와 챗봇을 이용한 서비스 기본 가이드 | AI 서비스 | . ",
     "url": "/OhGoodPay/pages/guide.html#-ohgoodpay---%EC%A0%84%EC%B2%B4-%EC%82%AC%EC%9A%A9-%EC%84%A4%EB%AA%85%EC%84%9C",
     
     "relUrl": "/pages/guide.html#-ohgoodpay---전체-사용-설명서"
-  },"3": {
+  },"5": {
     "doc": "OhgoodPay 사용 설명서",
     "title": "OhgoodPay 사용 설명서",
     "content": " ",
     "url": "/OhGoodPay/pages/guide.html",
     
     "relUrl": "/pages/guide.html"
-  },"4": {
-    "doc": "OHGOODPAY",
+  },"6": {
+    "doc": "OhgoodPay",
     "title": "\n  OhgoodPay\n ",
     "content": " ",
     "url": "/OhGoodPay/",
     
     "relUrl": "/"
-  },"5": {
-    "doc": "OHGOODPAY",
+  },"7": {
+    "doc": "OhgoodPay",
     "title": "페이와 숏폼이 붙었다 쓰는 순간 즐거워지는 오굿페이",
     "content": " ",
     "url": "/OhGoodPay/",
     
     "relUrl": "/"
-  },"6": {
-    "doc": "OHGOODPAY",
+  },"8": {
+    "doc": "OhgoodPay",
     "title": "🔗 목차",
     "content": ". | 프로젝트 소개 | 주요 기능 | 팀 소개 | 기술 스택 | 파일 구조 | 시스템 구조 | 보안 | 빌드 방법 | 협업 규칙 | . ",
     "url": "/OhGoodPay/#-%EB%AA%A9%EC%B0%A8",
     
     "relUrl": "/#-목차"
-  },"7": {
-    "doc": "OHGOODPAY",
+  },"9": {
+    "doc": "OhgoodPay",
     "title": "🖐🏻 프로젝트 소개",
     "content": "OhgoodPay는 BNPL을 지원하는 페이 서비스 입니다. BNPL이란? . Buy Now, Pay Later의 약자로 상품을 구매한 뒤, 일정 기간 후에 결제 대금을 지불하는 후불결제 . 오굿페이의 BNPL 서비스는 카드 없이도 간편하게 사용할 수 있는 후불결제 솔루션입니다. 신용카드 발급이 어려운 사용자, 당장 현금이 부족한 사용자도 합리적인 소비를 할 수 있도록 지원합니다. 안전하고, 이자 없는 단기간 후불 결제를 원하는 누구나 사용 가능합니다. “지금 사고, 나중에 갚는” BNPL 서비스를 오굿페이에서 만나보세요. ",
     "url": "/OhGoodPay/#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%86%8C%EA%B0%9C",
     
     "relUrl": "/#프로젝트-소개"
-  },"8": {
-    "doc": "OHGOODPAY",
+  },"10": {
+    "doc": "OhgoodPay",
     "title": "🎯 주요 기능",
     "content": "👤 사용자 . | 카드 없이 간편하게 “지금 구매, 나중에 납부” 가능 | 연체 없이 납부 및 결제, 숏폼 등을 통한 포인트 리워드 제공 | 사용자 맞춤형 소비 리포트 제공으로 소비 습관 확인 가능 | AI를 활용한 챗봇 서비스로 개인화된 상품 추천 가능 | OhgoodScore를 통한 신용도 확인 가능 | 한도 선정 이유 공개 및 등급 제도 확인 가능 | . 🧑‍🍳 가맹점 . | 오굿페이 BNPL 위젯 제공 | API 연동으로 자체 서비스에 연동 가능 | . 👀 운영자 . | 사용자의 연체율, 이용 패턴 등을 분석해 OhgoodScore 산정 | 결제 흐름, 연체 현황, API 호출 이력 등 모니터링 가능 | 추천 시스템 및 PG창 연동으로 광고 효과 및 가맹점 관리 가능 | . ",
     "url": "/OhGoodPay/#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5",
     
     "relUrl": "/#주요-기능"
-  },"9": {
-    "doc": "OHGOODPAY",
+  },"11": {
+    "doc": "OhgoodPay",
     "title": "👥 팀 소개",
     "content": ". ",
     "url": "/OhGoodPay/#%ED%8C%80-%EC%86%8C%EA%B0%9C",
     
     "relUrl": "/#팀-소개"
-  },"10": {
-    "doc": "OHGOODPAY",
+  },"12": {
+    "doc": "OhgoodPay",
     "title": "🔧 기술 스택",
     "content": "| 구분 | 기술 스택 | . | Frontend | | . | Backend | | . | Database | | . | Infra &amp; Cloud | | . | 외부 API | | . ",
     "url": "/OhGoodPay/#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D",
     
     "relUrl": "/#기술-스택"
-  },"11": {
-    "doc": "OHGOODPAY",
+  },"13": {
+    "doc": "OhgoodPay",
     "title": "📂 파일 구조",
     "content": "BE - Spring Boot . Spring Boot Repo 바로가기 . ohgoodpay/ ├── OhgoodpayApplication.java // Spring Boot 메인 실행 파일 ├── common/ // 공통 도메인(회원가입, 마이페이지 등) 서비스 ├── pay/ // 결제 및 포인트(BNPL 핵심) 서비스 ├── recommend/ // 대시보드 및 AI 추천 서비스 ├── shorts/ // 숏폼 커뮤니티(구독/댓글 등) 서비스 ├── security/ // JWT 및 사용자 인증 보안 │ ├── config/ // Spring Security 설정 │ ├── filter/ // 로그인/토큰 필터 │ ├── service/, util/ // 인증 서비스, JWT 유틸 │ ├── config/ // 글로벌 설정 파일들, CORS, Redis 등 ├── scheduled/ // 정기 작업 (스케줄링 서비스) ├── exception/ // 커스텀 예외 및 전역 에러 핸들링 └── resources/ // 공통 환경 설정 및 Redis, FastAPI 등 설정 파일 . BE - FastAPI . FastAPI Repo 바로가기 . OhGoodPayML/ ├── main.py # FastAPI 진입점 (서버 실행 파일) ├── config/ # OpenAI, Naver API 키 등 환경 설정 │ └── openai_config.py, naver_config.py │ ├── domain/ # 챗봇 흐름 처리, Ohgood Score 계산 로직, 카테고리 분류 ├── routers/ # FastAPI 라우터 (엔드포인트 정의) ├── schemas/ # Pydantic 기반 요청/응답 DTO ├── services/ # 서비스 계층 (FastAPI 내부 로직) │ ├── spring_client.py # Spring ↔ FastAPI 간 연동용 클라이언트 │ └── narratives/ # Dash용 AI 응답 흐름 처리 (prompt) | ├── requirements.txt # Python 패키지 목록 ├── .venv/ # 가상환경 디렉터리 (로컬용) . FE - React . React Repo 바로가기 . src/ ├── App.jsx, App.css, index.jsx, index.css # 앱 진입점 및 글로벌 스타일 │ ├── features/ # 도메인별 기능 모듈화 │ ├── auth/ # 로그인/회원가입 관련 │ ├── common/ # 마이페이지, 회원정보 관리 │ ├── home/ # 홈 화면 (BNPL, 체크인, 퀵액세스 등) │ ├── pay/ # 결제 위젯, 포인트, 납부 내역 │ ├── planet/ # 확장 예정 기능 │ ├── qrpin/ # QR/핀 기반 결제 │ ├── recommend/ # 대시보드 + AI 추천 │ └── shorts/ # 숏폼(피드, 프로필, 검색, 업로드) │ ├── pages/ # 페이지 단위 컴포넌트 (라우팅 대상) │ ├── auth/ # 로그인, 회원가입 │ ├── common/ # 마이페이지 화면 │ ├── home/ # 홈 화면 │ ├── pay/ # 결제/포인트 조회 페이지 │ ├── planet/ # (추가 예정) │ ├── qrpin/ # QR/핀 결제 페이지 │ ├── recommend/ # 대시보드 &amp; 챗봇 페이지 │ └── shorts/ # 숏폼 관련 (피드, 프로필, 업로드 등) │ └── shared/ # 공용 리소스 &amp; 유틸 ├── api/ # Axios 클라이언트 &amp; API 모듈 ├── assets/ # 공용 CSS, 폰트, 이미지 ├── components/ # 공용 UI 컴포넌트 (버튼, 모달 등) ├── hook/ # 커스텀 훅 ├── layout/ # 화면 레이아웃 (Main, Chat, Dash 등) ├── router/ # React Router 설정 ├── store/ . ",
     "url": "/OhGoodPay/#%ED%8C%8C%EC%9D%BC-%EA%B5%AC%EC%A1%B0",
     
     "relUrl": "/#파일-구조"
-  },"12": {
-    "doc": "OHGOODPAY",
+  },"14": {
+    "doc": "OhgoodPay",
     "title": "🧱 서비스 구조",
     "content": ". | 프론트엔드 (React + Vite) . | 사용자(웹/모바일)가 보는 화면. | 로그인/회원가입, 결제 위젯, 마이페이지, 숏폼(Shorts), 대시보드, AI 추천 등을 제공. | Zustand를 이용한 상태관리, 백엔드 서버와 API 통신. | . | 메인 서버 (Spring Boot 기반) . | 서비스의 핵심 비즈니스 로직 담당. | 주요 도메인 모듈:Common, Shorts, Recodash, Pay | DB와 연결되어 트랜잭션 관리 + Redis 캐시 활용. | . | 데이터 서버 (FastAPI + LLM 연동) . | AI/추천/분석 기능을 맡는 서브 서버. | 주요 역할: 챗봇 응답 (LLM), 대시보드 오굿스코어 계산, 소비 카테고리 분류 및 분석 | OpenAI를 통한 AI 조언 생성, 네이버 쇼핑 API를 이용한 RAG 구현 | . | 스토리지 &amp; 외부 연동 . | MariaDB: 메인 데이터 저장 (사용자, 결제, 숏폼, 포인트 등) | Redis: 챗봇 캐시 DB (빠른 대화 응답 처리) | AWS S3: 숏폼 영상 저장소 (업로드/조회) | 네이버 쇼핑 API: 외부 쇼핑 데이터 연동 | OpenAI API: AI 챗봇, 추천, 조언 생성에 활용 | . | . ",
     "url": "/OhGoodPay/#%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%A1%B0",
     
     "relUrl": "/#시스템-구조"
-  },"13": {
-    "doc": "OHGOODPAY",
+  },"15": {
+    "doc": "OhgoodPay",
     "title": "🚀 빌드 방법",
     "content": "OhgoodpayBE . 1) Java 버전 확인 . java --version # JDK 17 필요 . 2) FFmpeg 설치 . # Windows # https://www.ffmpeg.org/download.html 에서 다운로드 후 PATH 등록 # macOS brew install ffmpeg # Linux / EC2 sudo yum install -y ffmpeg # 설치 확인 ffmpeg -version . 3) 프로젝트 빌드 . # Windows ./gradlew.bat clean build # macOS / Linux ./gradlew clean build . 4) 서버 실행 . # Gradle로 실행 ./gradlew bootRun # 또는 JAR 직접 실행 java -jar build/libs/*.jar . 접속 URL . | Swagger: http://localhost:8080/swagger-ui/index.html | API Base: http://localhost:8080 | . 5) 의존성 관리 . 의존성 추가/변경 시 build.gradle 수정 후 동기화 ./gradlew clean build # 의존성 업데이트 ./gradlew dependencies # 의존성 확인 . 기술 스택 . | JDK: 17 | Framework: Spring Boot 3.5.5 | Database: MariaDB | Build: Gradle (Groovy) | . 주요 의존성 . | Spring Boot DevTools | Spring Data JPA | Spring Security | MariaDB Driver | Lombok | JWT (jsonwebtoken 0.12.6) | QueryDSL 5.0.0 | Swagger 2.6.0 | FFmpeg 8.0 | ZXing (QR/바코드) . | com.google.zxing:core:3.5.2 | com.google.zxing:javase:3.5.2 | . | . 데이터베이스 설정 . # application.properties spring.datasource.url=jdbc:mariadb://localhost:3306/your_database spring.datasource.username=your_username spring.datasource.password=your_password spring.datasource.driver-class-name=org.mariadb.jdbc.Driver . Docker 배포 . # 이미지 빌드 docker build -t app-backend . # 컨테이너 실행 docker run -p 8080:8080 app-backend . Podman 배포 . | 애플리케이션 이미지에 FFmpeg 포함 필수 | /tmp 폴더 권한 확인 필요 | . OhgoodpayML . Ohgoodpay Reco&amp;Analytics . 가상 환경(venv) 빠른 시작 . 1) Python 버전 확인 . python --version . 2) 가상환경 설정 . | 가상환경 이름은 꼭 .venv가 아니어도 됨 | . python -m venv venv .\\venv\\Scripts\\Activate python -m venv venv # windows / git bash source venv/Scripts/activate python -m venv venv # macOS / Linux / WSL source venv/bin/activate . 3) 패키지 설치 . python -m pip install --upgrade pip pip install -r requirements.txt . 4) 서버 실행 . uvicorn app.main:app --reload --port 8000 deactivate ## 비활성화 . | Swagger: http://localhost:8000/docs | . OhgoodpayFE . Ohgoodpay Frontend (React + Vite) . 1) Node.js 버전 확인 . node --version npm --version . 2) 프로젝트 초기 설정 . npm install . package.json 기준으로 필요한 의존성 자동 설치 . 3) 개발 서버 실행 . npm run dev . 기본 접속 주소: http://localhost:5173 . 4) 빌드 . npm run build . ",
     "url": "/OhGoodPay/#%EB%B9%8C%EB%93%9C-%EB%B0%A9%EB%B2%95",
     
     "relUrl": "/#빌드-방법"
-  },"14": {
-    "doc": "OHGOODPAY",
+  },"16": {
+    "doc": "OhgoodPay",
     "title": "🤝 협업 규칙",
     "content": "🎈 Branch 규칙 . | 메인 브랜치와 개인 이름별 브랜치를 구분하여 사용한다. | main : 배포 가능한 상태의 코드만을 관리하는 브랜치 | dev : main 배포 전 전체 기능 통합 test 브랜치 | . | . 🎈 Commit 규칙 . | 커밋 메세지는 다음과 같은 형식으로 작성한다. | . [이름] 명령:구현설명 ex) [gildong] feat:로그인서비스구현 . | 깃 컨벤션 . | feat : 로직 구현 | docs : 정적 파일 추가 | fix : 버그 수정 | . | . 🎈 PR 규칙 . | 공용 템플릿을 사용하여 PR을 작성 : PR 템플릿 바로가기 | . 🎈 Issue 규칙 . | 공용 템플릿을 사용하여 issue 작성 : issue 템플릿 바로가기 | . 🎈 데일리 스크럼 . | 공용 템플릿을 사용하여 데일리 스크럼 작성 | . ",
     "url": "/OhGoodPay/#%ED%98%91%EC%97%85-%EA%B7%9C%EC%B9%99",
     
     "relUrl": "/#협업-규칙"
-  },"15": {
-    "doc": "OHGOODPAY",
-    "title": "OHGOODPAY",
+  },"17": {
+    "doc": "OhgoodPay",
+    "title": "OhgoodPay",
     "content": " ",
     "url": "/OhGoodPay/",
     
     "relUrl": "/"
-  },"16": {
+  },"18": {
     "doc": "페이 서비스 이용하기",
     "title": "👤 OhgoodPay - 페이 서비스 이용 방법",
     "content": "이 문서는 OhgoodPay의 Pay 서비스를 이용하는 사용자들을 위한 가이드입니다. 회원가입부터 결제, 납부, 출석체크 등 전반적인 이용 흐름을 상세히 설명합니다. 📋 목차 . | 회원가입 및 로그인 | 결제 | 결제 내역 확인 | 납부 내역 확인 | 연장 신청 &amp; 즉시 납부 | 포인트 내역 &amp; 출석 체크 | . 1️⃣ 회원가입 및 로그인 . | 메인 화면 | 로그인 | . | | | . | 회원가입 | 로그인 후 메인 화면 | . | | | . | 플랫폼에 접속하면 오굿페이의 메인 화면을 보실 수 있습니다. | 오른쪽 상단의 버튼을 통해 로그인이 가능합니다. | 정보를 입력 한 뒤 회원가입을 완료해주세요. 회원가입이 끝나면 로그인창으로 이동합니다. | 로그인 후 메인 화면에 내가 사용한 BNPL 내역이 표시되고, 서비스 이용이 가능합니다. | . 2️⃣ 결제 . | QR 결제 | 제휴 쇼핑몰의 PG창 | . | | | . | QR 스캔 결제 모달 | 결제 완료 창 | . | | | . | 결제가 완료될 시 제휴 쇼핑몰에서 다음과 같은 창을 확인 하실 수 있습니다. | QR 스캔 혹은 PG 창의 PIN 코드를 입력하면 결제 모달을 확인할 수 있습니다. | . 3️⃣ 결제 내역 확인 . | 결제 내역 | 결제 내역 상세 | . | | | . | 결제 내역 확인 페이지에서 월별 결제한 내역을 확인 하실 수 있습니다. | 결제 내역을 클릭하면 해당 결제의 상세 내역을 확인할 수 있습니다. | . 4️⃣ 납부 내역 확인 . | 상세 | . | | . | 납부 내역 확인 페이지에서 납부해야 할 BNPL 금액을 확인할 수 있습니다. | . 5️⃣ 연장 신청 &amp; 즉시 납부 . | 납부 연장 신청 | 즉시 납부 | . | | | . | 연장 신청 버튼을 클릭하면 납부일 미루기가 가능합니다. | 납부일은 15일 고정이며, 연장 또한 해당 달의 말일로 고정되어 있습니다. | 납부하고 싶은 내역을 체크한 후 즉시 납부를 클릭하면 즉시 납부가 가능합니다. | . 6️⃣ 포인트 내역 &amp; 출석 체크 . | 포인트 내역 | 출석 체크 | . | | | . | 포인트 내역은 내역 페이지에서 확인이 가능합니다. | 출석 체크를 통해 하루에 한 번 랜덤한 포인트 획득이 가능합니다. | . © 2025 OhGoodFood. All Rights Reserved. ",
     "url": "/OhGoodPay/pages/pay_guide.html#-ohgoodpay---%ED%8E%98%EC%9D%B4-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9D%B4%EC%9A%A9-%EB%B0%A9%EB%B2%95",
     
     "relUrl": "/pages/pay_guide.html#-ohgoodpay---페이-서비스-이용-방법"
-  },"17": {
+  },"19": {
     "doc": "페이 서비스 이용하기",
     "title": "페이 서비스 이용하기",
     "content": " ",
     "url": "/OhGoodPay/pages/pay_guide.html",
     
     "relUrl": "/pages/pay_guide.html"
-  },"18": {
+  },"20": {
     "doc": "숏폼 서비스 이용하기",
     "title": "🏪 OhgoodPay - 숏츠 서비스 이용 방법",
     "content": "이 문서는 OhgoodPay의 Shorts 서비스를 이용하는 사용자를 위한 가이드 입니다. 영상 업로드부터 구독관리, 댓글, 포인트 등 전반적인 이용 흐름을 상세히 설명합니다. 📋 목차 . | 숏츠 메인 | 영상 업로드 | 좋아요 &amp; 댓글 &amp; 공유 | 구독 및 피드 맞춤화 | 자주 묻는 질문(FAQ) | . 1️⃣ 숏츠 메인 . | 숏츠 메인 | 댓글 기능 | . | | | . | 숏츠 영상 보기는 비회원인 경우에도 가능합니다. | 스와이프로 다음 영상과 이전 영상을 확인 할 수 있습니다. | 댓글, 좋아요, 포인트 적립등의 기능은 로그인 후에 이용 가능합니다. | 영상을 일정시간 이상 시청하면 좌측 상단에 위치한 포인트 게이지가 채워지고, 랜덤으로 포인트가 지급됩니다. | 하루에 영상으로 적립할 수 있는 최대 포인트는 100p 입니다. | 댓글과, 대댓글 좋아요 기능을 사용할 수 있습니다. | . 2️⃣ 영상 업로드 . | 영상 업로드 | 썸네일 변경 | . | | | . | 영상 업로드는 숏폼 특성상 60초이내로 제한됩니다. | 영상 업로드시 영상 제목과 내용을 입력할 수 있습니다. | 추가적으로 영상의 썸네일을 변경할 수 있습니다. | . 3️⃣ 마이페이지 및 공유하기 . | 마이페이지 | 좋아요한 영상 보기 | 영상 공유 | . | | | | . | 마이페이지에서 사용자의 프로필과 구독리스트, 좋아요 표시한 영상, 댓글 단 영상을 한번에 확인할 수 있습니다. | 모두보기 선택시 각 영상을 모두보는 페이지로 이동할 수 있습니다. | 영상에서 공유 버튼 클릭시 외부 공유 가능한 링크가 생성되어 공유할 수 있습니다. | . 4️⃣ 구독 및 피드 맞춤화 . | 채널 보기 | 프로필 | 구독 | . | | | | . | 채널 보기를 통해 내가 올린 영상을 관리할 수 있습니다. | 프로필 편집을 통해서 프로필 이미지, 이름, 자기소개를 변경할 수 있습니다. | 구독하는 채널을 확인할 수 있고, 바로 해당 채널로 이동할 수 있습니다. | . 🔟 자주 묻는 질문(FAQ) . ❓ Q. 영상이 안나와요!! . 👉 서버상태에 따라서,,,, . © 2025 OhGoodPay. All Rights Reserved. ",
     "url": "/OhGoodPay/pages/shorts_guide.html#-ohgoodpay---%EC%88%8F%EC%B8%A0-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9D%B4%EC%9A%A9-%EB%B0%A9%EB%B2%95",
     
     "relUrl": "/pages/shorts_guide.html#-ohgoodpay---숏츠-서비스-이용-방법"
-  },"19": {
+  },"21": {
     "doc": "숏폼 서비스 이용하기",
     "title": "숏폼 서비스 이용하기",
     "content": " ",
